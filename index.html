@@ -3194,7 +3194,6 @@ destructive_action_in_freeze {
       appData.blogs = [...validBlogs, ...manualBlogs];
 
       renderBlogsFiltersAndGrid();
-      showToast(`✅ Loaded ${validBlogs.length} article(s) from GitHub`);
     } catch (err) {
       console.warn('GitHub blog load failed, using local data:', err);
       // Fallback: use whatever is in appData.blogs already
@@ -3688,7 +3687,7 @@ destructive_action_in_freeze {
         <div class="card-links-row">
           ${p.liveUrl ? `<a href="${p.liveUrl}" target="_blank" rel="noopener noreferrer" class="card-link-item live-link" onclick="event.stopPropagation()">🌐 Live Demo ↗</a>` : ''}
           ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener noreferrer" class="card-link-item github-link" onclick="event.stopPropagation()">💻 GitHub Repo →</a>` : ''}
-          <button type="button" class="card-link-item share-link" onclick="event.stopPropagation(); openProjectModal('${p.id}')">🔗 Share</button>
+          <button type="button" class="card-link-item share-link" onclick="event.stopPropagation(); openProjectModal('${p.id}')">🔍 View Details & Share</button>
         </div>
       `;
 
@@ -3704,8 +3703,7 @@ destructive_action_in_freeze {
         </div>
         <div class="card-bottom-bar">
           <h3 class="card-main-title">${p.title}</h3>
-          <p class="card-desc">${p.desc}</p>
-          <div class="card-tags">
+          <div class="card-tags" style="margin: 0.6rem 0 0.8rem;">
             ${p.tags.map(t => `<span class="card-tag">${t}</span>`).join('')}
           </div>
           ${linksHtml}
