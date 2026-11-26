@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
   /* ─── RESET & CSS VARIABLES ─── */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -953,6 +954,149 @@
     text-decoration: none;
   }
 
+  .card-link-item.share-link {
+    color: #93c5fd;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(96, 165, 250, 0.35);
+  }
+  .card-link-item.share-link:hover {
+    color: #ffffff;
+    background: rgba(59, 130, 246, 0.25);
+    border-color: #93c5fd;
+    box-shadow: 0 0 16px rgba(96, 165, 250, 0.4);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+
+  /* ─── PROJECT SHARE & SPOTLIGHT MODAL ─── */
+  .project-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(3, 7, 18, 0.88);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .project-modal-overlay.active {
+    display: flex;
+    opacity: 1;
+  }
+  .project-modal-card {
+    background: var(--bg-card);
+    border: 2px solid var(--border-gold);
+    border-radius: 20px;
+    max-width: 640px;
+    width: 100%;
+    padding: 2.2rem;
+    box-shadow: 0 25px 60px -15px rgba(234, 179, 8, 0.4);
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .project-modal-overlay.active .project-modal-card {
+    transform: translateY(0);
+  }
+  .project-modal-close {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(234, 179, 8, 0.3);
+    color: var(--gold-bright);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .project-modal-close:hover {
+    background: var(--gold-bright);
+    color: #080b11;
+  }
+  .project-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+  .project-modal-icon {
+    font-size: 2.4rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: rgba(234, 179, 8, 0.1);
+    border: 1px solid rgba(234, 179, 8, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .project-modal-category {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--gold-bright);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .project-modal-title {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin: 0.2rem 0 0;
+  }
+  .project-modal-desc {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-bottom: 1.2rem;
+  }
+  .project-modal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1.5rem;
+  }
+  .project-modal-actions {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .project-modal-share-box {
+    background: rgba(6, 10, 18, 0.7);
+    border: 1px solid rgba(234, 179, 8, 0.25);
+    border-radius: 12px;
+    padding: 1.1rem;
+  }
+  .project-modal-share-row {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .project-modal-share-row input {
+    flex: 1;
+    min-width: 200px;
+    background: #060910;
+    border: 1px solid rgba(234, 179, 8, 0.3);
+    border-radius: 8px;
+    padding: 0.5rem 0.8rem;
+    color: #86efac;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+
   /* ─── 7. CONTACT VIEW ─── */
   .contact-card-box {
     max-width: 650px;
@@ -1367,6 +1511,50 @@
 <div class="toast" id="toastBox">
   <span id="toastIcon">✅</span>
   <span id="toastMsg">Changes saved successfully!</span>
+</div>
+
+<!-- PROJECT SHARE & SPOTLIGHT MODAL -->
+<div id="projectModalOverlay" class="project-modal-overlay" onclick="closeProjectModal(event)">
+  <div class="project-modal-card" onclick="event.stopPropagation()">
+    <button type="button" class="project-modal-close" onclick="closeProjectModal()" title="Close">✕</button>
+    
+    <div class="project-modal-header">
+      <div id="modalProjIcon" class="project-modal-icon">🛡️</div>
+      <div>
+        <span id="modalProjCategory" class="project-modal-category">GOVERNANCE</span>
+        <h2 id="modalProjTitle" class="project-modal-title">Project Title</h2>
+      </div>
+    </div>
+
+    <p id="modalProjDesc" class="project-modal-desc"></p>
+
+    <div id="modalProjTags" class="project-modal-tags"></div>
+
+    <div class="project-modal-actions">
+      <a id="modalProjLiveBtn" href="#" target="_blank" rel="noopener noreferrer" class="card-link-item live-link" style="display:none; padding:0.6rem 1.2rem; font-size:0.9rem;">
+        🌐 Open Live Demo ↗
+      </a>
+      <a id="modalProjGitBtn" href="#" target="_blank" rel="noopener noreferrer" class="card-link-item github-link" style="display:none; padding:0.6rem 1.2rem; font-size:0.9rem;">
+        💻 View GitHub Repo →
+      </a>
+    </div>
+
+    <!-- Shareable Link Box -->
+    <div class="project-modal-share-box">
+      <div style="font-size:0.85rem; font-weight:700; color:var(--gold-bright); margin-bottom:0.4rem;">
+        🔗 Shareable Project Link
+      </div>
+      <div class="project-modal-share-row">
+        <input type="text" id="modalProjShareUrl" readonly />
+        <button type="button" class="btn-gold" style="padding:0.45rem 1rem; font-size:0.82rem;" onclick="copyProjectShareLink()">
+          📋 Copy
+        </button>
+        <button type="button" class="card-link-item github-link" style="padding:0.45rem 1rem; font-size:0.82rem;" onclick="shareProjectLinkedIn()">
+          LinkedIn ↗
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- PUBLIC HEADER -->
@@ -2139,6 +2327,22 @@
 
             <!-- PANEL 6: RESUME FULL EDITOR -->
             <div id="panel-resume" class="admin-panel">
+              <!-- PDF Auto-Fill Box -->
+              <div class="admin-form-box" style="border: 2px dashed rgba(234, 179, 8, 0.45); background: rgba(234, 179, 8, 0.04);">
+                <div class="admin-form-title"><span>⚡</span> Auto-Fill from Resume PDF</div>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem; line-height:1.6;">
+                  Upload your existing resume PDF. We will automatically scrape your <strong>Name</strong>, <strong>Role/Title</strong>, <strong>Contact Line</strong>, and <strong>Professional Summary</strong> and fill the fields below. You can review and adjust everything before saving!
+                </p>
+                <div style="display:flex; align-items:center; gap:1.2rem; flex-wrap:wrap;">
+                  <div style="flex:1; min-width:240px;">
+                    <label style="display:block; font-size:0.82rem; font-weight:600; color:var(--gold-bright); margin-bottom:0.4rem; text-transform:uppercase;">
+                      Select Resume PDF
+                    </label>
+                    <input type="file" id="resumePdfFileInput" accept=".pdf,application/pdf" onchange="handleResumePdfUpload(event)" style="background:#060910; border:1px solid rgba(234,179,8,0.3); border-radius:8px; padding:0.6rem; color:#fff; width:100%;" />
+                  </div>
+                  <div id="resumePdfStatus" style="font-size:0.85rem; color:var(--gold-bright); font-weight:600; padding-top:1.2rem;"></div>
+                </div>
+              </div>
               <!-- Header, Role & Summary -->
               <div class="admin-form-box">
                 <div class="admin-form-title"><span>📄</span> Resume Header & Summary</div>
@@ -2656,10 +2860,14 @@ destructive_action_in_freeze {
 
     // Load blogs from GitHub (auto-discovers all articles)
     loadGitHubBlogs().then(() => {
-      // After blogs loaded, check hash for direct article link
+      // After blogs loaded, check hash for direct article or project link
       if (hash.startsWith('article&id=')) {
         const artId = hash.split('article&id=')[1];
         openArticleReader(artId);
+      } else if (hash.startsWith('project&id=')) {
+        const projId = hash.split('project&id=')[1];
+        navigateTo('projects');
+        setTimeout(() => openProjectModal(projId), 150);
       } else if (hash && document.getElementById('view-' + hash)) {
         navigateTo(hash);
       } else {
@@ -2831,6 +3039,215 @@ destructive_action_in_freeze {
     }).catch(() => {
       prompt('Copy this article link to share:', url);
     });
+  }
+
+  /* ─── PROJECT MODAL & SHAREABLE LINK ─── */
+  let currentViewingProject = null;
+
+  function openProjectModal(projId) {
+    const proj = appData.projects.find(p => p.id === projId) || appData.projects[0];
+    if (!proj) return;
+
+    currentViewingProject = proj;
+    const icons = { amber: '🛡️', blue: '🔍', purple: '🤖', green: '✅' };
+    const icon = icons[proj.theme] || '⚙️';
+
+    document.getElementById('modalProjIcon').innerText = icon;
+    document.getElementById('modalProjCategory').innerText = (proj.category || 'PROJECT').toUpperCase();
+    document.getElementById('modalProjTitle').innerText = proj.title;
+    document.getElementById('modalProjDesc').innerText = proj.desc;
+
+    // Tags
+    const tagsCont = document.getElementById('modalProjTags');
+    if (tagsCont) {
+      tagsCont.innerHTML = proj.tags.map(t => `<span class="card-tag">${t}</span>`).join('');
+    }
+
+    // Live button
+    const liveBtn = document.getElementById('modalProjLiveBtn');
+    if (liveBtn) {
+      if (proj.liveUrl) {
+        liveBtn.href = proj.liveUrl;
+        liveBtn.style.display = 'inline-flex';
+      } else {
+        liveBtn.style.display = 'none';
+      }
+    }
+
+    // GitHub button
+    const gitBtn = document.getElementById('modalProjGitBtn');
+    if (gitBtn) {
+      if (proj.url) {
+        gitBtn.href = proj.url;
+        gitBtn.style.display = 'inline-flex';
+      } else {
+        gitBtn.style.display = 'none';
+      }
+    }
+
+    // Share link
+    const shareUrl = window.location.origin + window.location.pathname + '#project&id=' + proj.id;
+    const shareInput = document.getElementById('modalProjShareUrl');
+    if (shareInput) shareInput.value = shareUrl;
+
+    history.pushState(null, null, '#project&id=' + proj.id);
+
+    const overlay = document.getElementById('projectModalOverlay');
+    if (overlay) overlay.classList.add('active');
+  }
+
+  function closeProjectModal(e) {
+    if (e && e.target && e.target.closest('.project-modal-card') && !e.target.classList.contains('project-modal-close')) return;
+    const overlay = document.getElementById('projectModalOverlay');
+    if (overlay) overlay.classList.remove('active');
+    currentViewingProject = null;
+    history.pushState(null, null, '#projects');
+  }
+
+  function copyProjectShareLink() {
+    const shareInput = document.getElementById('modalProjShareUrl');
+    if (!shareInput) return;
+    const url = shareInput.value;
+    navigator.clipboard.writeText(url).then(() => {
+      showToast('🔗 Project shareable link copied to clipboard!');
+    }).catch(() => {
+      prompt('Copy project share link:', url);
+    });
+  }
+
+  function shareProjectLinkedIn() {
+    if (!currentViewingProject) return;
+    const shareUrl = window.location.origin + window.location.pathname + '#project&id=' + currentViewingProject.id;
+    const linkedinShareUrl = "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(shareUrl);
+    window.open(linkedinShareUrl, '_blank', 'width=600,height=600');
+  }
+
+  /* ─── RESUME PDF PARSER & AUTO-FILL ─── */
+  async function handleResumePdfUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const statusEl = document.getElementById('resumePdfStatus');
+    if (statusEl) statusEl.innerText = '⟳ Reading PDF text...';
+
+    try {
+      if (typeof pdfjsLib === 'undefined') {
+        throw new Error('PDF.js library is loading. Please try again in a few moments.');
+      }
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+      const arrayBuffer = await file.arrayBuffer();
+      const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+      const pdf = await loadingTask.promise;
+
+      let fullText = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        const pageStrings = textContent.items.map(item => item.str);
+        fullText += pageStrings.join(' ') + '\n';
+      }
+
+      if (!fullText.trim()) {
+        throw new Error('No selectable text found in PDF. If it is a scanned image, please export as a text PDF.');
+      }
+
+      parseAndFillResumeFields(fullText);
+      if (statusEl) statusEl.innerText = '✅ Extracted! Review fields below.';
+      showToast('📄 Resume text extracted! Review fields below and click Save.');
+    } catch (err) {
+      console.error('PDF Parse Error:', err);
+      if (statusEl) statusEl.innerText = '❌ ' + (err.message || 'Failed to read PDF');
+      alert('Error parsing PDF: ' + (err.message || 'Please check that the file is a readable PDF.'));
+    }
+  }
+
+  function parseAndFillResumeFields(rawText) {
+    const lines = rawText.split('\n').map(l => l.trim()).filter(Boolean);
+
+    // 1. Extract Email
+    const emailMatch = rawText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+    const email = emailMatch ? emailMatch[0] : '';
+
+    // 2. Extract Phone
+    const phoneMatch = rawText.match(/(?:\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}|\+?\d{10,13}/);
+    const phone = phoneMatch ? phoneMatch[0] : '';
+
+    // 3. Extract Links
+    const githubMatch = rawText.match(/(?:github\.com\/[a-zA-Z0-9_-]+)/i);
+    const linkedinMatch = rawText.match(/(?:linkedin\.com\/in\/[a-zA-Z0-9_-]+)/i);
+
+    // 4. Extract Location
+    const locMatch = rawText.match(/(?:India|Bengaluru|Bangalore|Hyderabad|Pune|Mumbai|Delhi|Remote|USA|California|San Francisco|New York)/i);
+    const location = locMatch ? locMatch[0] : '';
+
+    // 5. Build Contact Line
+    const contactParts = [];
+    if (location) contactParts.push(`📍 ${location}`);
+    if (email) contactParts.push(`📧 ${email}`);
+    if (phone) contactParts.push(`📱 ${phone}`);
+    if (githubMatch) contactParts.push(`🌐 ${githubMatch[0]}`);
+    else if (linkedinMatch) contactParts.push(`🔗 ${linkedinMatch[0]}`);
+
+    const contactLine = contactParts.join('  |  ');
+
+    // 6. Name detection
+    let extractedName = '';
+    for (let i = 0; i < Math.min(6, lines.length); i++) {
+      const line = lines[i];
+      if (/resume|curriculum|vitae|page|contact|email|phone/i.test(line)) continue;
+      if (line.includes('@') || line.includes('http') || line.includes('/')) continue;
+      if (line.length >= 3 && line.length <= 40 && !/\d/.test(line)) {
+        extractedName = line;
+        break;
+      }
+    }
+
+    // 7. Role / Title detection
+    let extractedRole = '';
+    const roleKeywords = ['engineer', 'architect', 'developer', 'lead', 'specialist', 'scientist', 'manager'];
+    for (let i = 0; i < Math.min(8, lines.length); i++) {
+      const line = lines[i];
+      if (line === extractedName) continue;
+      if (roleKeywords.some(kw => line.toLowerCase().includes(kw))) {
+        extractedRole = line;
+        break;
+      }
+    }
+
+    // 8. Summary detection
+    let extractedSummary = '';
+    const summaryHeaderIdx = lines.findIndex(l => /^(summary|professional summary|executive summary|profile|about me)$/i.test(l));
+    if (summaryHeaderIdx !== -1) {
+      const summaryLines = [];
+      for (let i = summaryHeaderIdx + 1; i < lines.length; i++) {
+        const l = lines[i];
+        if (/^(experience|work experience|employment|education|skills|technical skills|projects)$/i.test(l)) break;
+        summaryLines.push(l);
+      }
+      extractedSummary = summaryLines.join(' ');
+    } else {
+      const summaryPara = lines.find(l => l.length > 80 && (l.includes('experience') || l.includes('AI') || l.includes('engineer') || l.includes('system')));
+      if (summaryPara) extractedSummary = summaryPara;
+    }
+
+    // Populate inputs
+    if (extractedName && document.getElementById('formResumeName')) {
+      document.getElementById('formResumeName').value = extractedName;
+    }
+    if (extractedRole && document.getElementById('formResumeRole')) {
+      document.getElementById('formResumeRole').value = extractedRole;
+    }
+    if (contactLine && document.getElementById('formResumeContact')) {
+      document.getElementById('formResumeContact').value = contactLine;
+    }
+    if (extractedSummary && document.getElementById('formResumeSummary')) {
+      document.getElementById('formResumeSummary').value = extractedSummary.trim();
+    }
+
+    // Smooth scroll to the form so the user can review immediately
+    const targetEl = document.getElementById('formResumeName');
+    if (targetEl) targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   /* ─── RENDER PUBLIC PORTFOLIO ─── */
@@ -3006,32 +3423,25 @@ destructive_action_in_freeze {
       card.className = 'gold-project-card clickable-card';
       card.setAttribute('data-category', p.category);
 
-      // Primary URL for clicking anywhere on the card:
-      // If live website exists, opening that gives the best user experience; otherwise GitHub
-      const primaryUrl = p.liveUrl || p.url;
-      if (primaryUrl) {
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', (e) => {
-          // If clicked directly on an <a> or <button>, let that element's click handle it
-          if (e.target.closest('a') || e.target.closest('button')) return;
-          window.open(primaryUrl, '_blank');
-        });
-      }
+      // Click anywhere on card opens project modal with share link & details
+      card.style.cursor = 'pointer';
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('a') || e.target.closest('button')) return;
+        openProjectModal(p.id);
+      });
 
       // Icon per theme
       const icons = { amber: '🛡️', blue: '🔍', purple: '🤖', green: '✅' };
       const icon = icons[p.theme] || '⚙️';
 
-      // Build link buttons: Live Website (optional) & GitHub Repo (optional)
-      let linksHtml = '';
-      if (p.liveUrl || p.url) {
-        linksHtml = `
-          <div class="card-links-row">
-            ${p.liveUrl ? `<a href="${p.liveUrl}" target="_blank" rel="noopener noreferrer" class="card-link-item live-link" onclick="event.stopPropagation()">🌐 Live Demo ↗</a>` : ''}
-            ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener noreferrer" class="card-link-item github-link" onclick="event.stopPropagation()">💻 GitHub Repo →</a>` : ''}
-          </div>
-        `;
-      }
+      // Build link buttons: Live Website (optional), GitHub Repo (optional) & Share Link
+      const linksHtml = `
+        <div class="card-links-row">
+          ${p.liveUrl ? `<a href="${p.liveUrl}" target="_blank" rel="noopener noreferrer" class="card-link-item live-link" onclick="event.stopPropagation()">🌐 Live Demo ↗</a>` : ''}
+          ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener noreferrer" class="card-link-item github-link" onclick="event.stopPropagation()">💻 GitHub Repo →</a>` : ''}
+          <button type="button" class="card-link-item share-link" onclick="event.stopPropagation(); openProjectModal('${p.id}')">🔗 Share</button>
+        </div>
+      `;
 
       card.innerHTML = `
         <div class="card-image-box">
