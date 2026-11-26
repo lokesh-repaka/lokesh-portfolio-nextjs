@@ -2815,7 +2815,8 @@ destructive_action_in_freeze {
     ],
     projectCategories: [
       { id: 'automation', name: 'ENTERPRISE AI & AUTOMATION' },
-      { id: 'agents', name: 'AGENTIC AI & MULTI-AGENT SYSTEMS' }
+      { id: 'agents', name: 'AGENTIC AI & MULTI-AGENT SYSTEMS' },
+      { id: 'rag', name: 'ENTERPRISE RAG & VECTOR PLATFORMS' }
     ],
     projects: [
       {
@@ -2847,6 +2848,16 @@ destructive_action_in_freeze {
         url: 'https://github.com/lokesh-repaka/apexmotion-supplier-risk-intelligence',
         liveUrl: 'https://apexmotion-supplier-risk.vercel.app',
         theme: 'green'
+      },
+      {
+        id: 'rag_studio',
+        title: 'RAG Studio & DocuMind AI — Enterprise Knowledge Architecture Platform',
+        category: 'rag',
+        desc: 'Enterprise-grade visual RAG pipeline engineering, benchmarking, and autonomous optimization platform. Unifies an interactive drag-and-drop pipeline canvas (RAGForge) with a 6-specialist LangGraph optimization swarm (AutoRAG Architect) that systematically benchmarks chunking strategies, embedding models, and hybrid retrieval against rigorous RAGAS quality metrics (faithfulness, context recall, and answer relevance). Features automated one-click infrastructure export (Terraform, Kubernetes, Docker) and a production reference enterprise Q&A engine (DocuMind AI) delivering sub-second hybrid search with cross-encoder reranking.',
+        tags: ['Next.js 14', 'FastAPI', 'LangGraph', 'Qdrant', 'RAGAS', 'Celery', 'Docker', 'Terraform'],
+        url: '',
+        liveUrl: 'https://rag-studio-web-three.vercel.app/designer',
+        theme: 'purple'
       }
     ],
     blogCategories: [
@@ -2968,6 +2979,17 @@ destructive_action_in_freeze {
             "Engineered an early-warning disruption engine calculating deterministic inventory Days of Cover (DoC) and multi-million dollar financial exposures weeks ahead of potential factory shortages.",
             "Implemented cryptographic Human-in-the-Loop (HITL) spend governance with digital signature verification and executive dual-authorization gates for emergency mitigation spend exceeding $100,000."
           ]
+        },
+        {
+          id: 'rp4',
+          title: "RAG Studio & DocuMind AI — Enterprise Knowledge Architecture Platform",
+          role: "Lead AI Systems & Evaluation Engineer",
+          duration: "2024",
+          bullets: [
+            "Architected an enterprise visual RAG pipeline engineering and evaluation platform featuring drag-and-drop ingestion, embedding, vector store, and hybrid retrieval configuration with 1-click Terraform/Kubernetes code generation.",
+            "Engineered an autonomous 6-specialist LangGraph optimization swarm benchmarking chunking strategies, embeddings, and hybrid retrieval (Dense + BM25 via Reciprocal Rank Fusion) against RAGAS metrics to reduce hallucination rates below 1.2%.",
+            "Deployed high-throughput reference Q&A engine (DocuMind AI) on GCP Cloud Run with Qdrant vector database, Cohere cross-encoder reranking, and sub-second p95 retrieval latency."
+          ]
         }
       ],
       certifications: [
@@ -3025,7 +3047,7 @@ destructive_action_in_freeze {
           }
 
           // If resume experience has legacy placeholder data or missing Genpact experience, upgrade resume to real credentials:
-          if (!parsed.resume || !parsed.resume.experience || parsed.resume.experience.some(e => e.company === "Open Source / Independent" || e.title.includes("Enterprise AI Governance")) || !parsed.resume.projects || parsed.resume.projects.some(p => p.id === 'rp4' || p.title.includes("PolicyPilot"))) {
+          if (!parsed.resume || !parsed.resume.experience || parsed.resume.experience.some(e => e.company === "Open Source / Independent" || e.title.includes("Enterprise AI Governance")) || !parsed.resume.projects || parsed.resume.projects.some(p => p.id === 'rp4' && p.title.includes("LangChain"))) {
             parsed.resume = JSON.parse(JSON.stringify(DEFAULT_DATA.resume));
             parsed.texts.resumeContact = DEFAULT_DATA.texts.resumeContact;
             parsed.texts.resumeSummary = DEFAULT_DATA.texts.resumeSummary;
@@ -3036,11 +3058,32 @@ destructive_action_in_freeze {
             parsed.resume.certifications = DEFAULT_DATA.resume.certifications;
           }
 
-          // If projects contains legacy projects (p1, p2, etc.) or is missing clouddesk_support, ensure both enterprise projects are present:
-          if (!parsed.projects || parsed.projects.some(p => p.id === 'p1' || p.id === 'p2' || p.id === 'p3' || p.id === 'p4') || !parsed.projects.some(p => p.id === 'clouddesk_support') || !parsed.projects.some(p => p.id === 'apexmotion_risk')) {
+          // If projects contains legacy projects or is missing any of the 4 enterprise projects, reload:
+          if (!parsed.projects || parsed.projects.some(p => p.id === 'p1' || p.id === 'p2' || p.id === 'p3' || p.id === 'p4') || !parsed.projects.some(p => p.id === 'clouddesk_support') || !parsed.projects.some(p => p.id === 'apexmotion_risk') || !parsed.projects.some(p => p.id === 'rag_studio')) {
             parsed.projects = JSON.parse(JSON.stringify(DEFAULT_DATA.projects));
             parsed.projectCategories = JSON.parse(JSON.stringify(DEFAULT_DATA.projectCategories));
           }
+
+          // Always synchronize latest metadata, client descriptions, and links:
+          if (parsed.projects) {
+            parsed.projects.forEach(p => {
+              const defP = DEFAULT_DATA.projects.find(dp => dp.id === p.id);
+              if (defP) {
+                p.desc = defP.desc;
+                p.title = defP.title;
+                p.tags = defP.tags;
+                p.url = defP.url;
+                p.liveUrl = defP.liveUrl;
+                p.category = defP.category;
+                p.theme = defP.theme;
+              }
+            });
+            parsed.projectCategories = JSON.parse(JSON.stringify(DEFAULT_DATA.projectCategories));
+          }
+          if (parsed.resume) {
+            parsed.resume.projects = JSON.parse(JSON.stringify(DEFAULT_DATA.resume.projects));
+          }
+
           return parsed;
         }
       } catch (e) { }
@@ -3287,7 +3330,7 @@ destructive_action_in_freeze {
     if (!proj) return;
 
     currentViewingProject = proj;
-    const icons = { amber: '🛡️', blue: '🔍', purple: '🤖', green: '✅' };
+    const icons = { amber: '🛡️', blue: '🔍', purple: '🧠', green: '⚡' };
     const icon = icons[proj.theme] || '⚙️';
 
     document.getElementById('modalProjIcon').innerText = icon;
@@ -3312,14 +3355,25 @@ destructive_action_in_freeze {
       }
     }
 
-    // GitHub button
+    // GitHub button / Private repo notice
     const gitBtn = document.getElementById('modalProjGitBtn');
+    let privateNote = document.getElementById('modalProjPrivateNote');
+    if (!privateNote && gitBtn && gitBtn.parentNode) {
+      privateNote = document.createElement('span');
+      privateNote.id = 'modalProjPrivateNote';
+      privateNote.className = 'card-link-item';
+      privateNote.style.cssText = 'opacity:0.85; cursor:default; border-style:dashed; color:var(--text-muted); font-size:0.75rem;';
+      privateNote.innerText = '🔒 Enterprise Private Repository (Code available upon request)';
+      gitBtn.parentNode.insertBefore(privateNote, gitBtn.nextSibling);
+    }
     if (gitBtn) {
       if (proj.url) {
         gitBtn.href = proj.url;
         gitBtn.style.display = 'inline-flex';
+        if (privateNote) privateNote.style.display = 'none';
       } else {
         gitBtn.style.display = 'none';
+        if (privateNote) privateNote.style.display = 'inline-flex';
       }
     }
 
@@ -3693,14 +3747,14 @@ destructive_action_in_freeze {
       });
 
       // Icon per theme
-      const icons = { amber: '🛡️', blue: '🔍', purple: '🤖', green: '✅' };
+      const icons = { amber: '🛡️', blue: '🔍', purple: '🧠', green: '⚡' };
       const icon = icons[p.theme] || '⚙️';
 
       // Build link buttons: Live Website (optional), GitHub Repo (optional) & Share Link
       const linksHtml = `
         <div class="card-links-row">
           ${p.liveUrl ? `<a href="${p.liveUrl}" target="_blank" rel="noopener noreferrer" class="card-link-item live-link" onclick="event.stopPropagation()">🌐 Live Demo ↗</a>` : ''}
-          ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener noreferrer" class="card-link-item github-link" onclick="event.stopPropagation()">💻 GitHub Repo →</a>` : ''}
+          ${p.url ? `<a href="${p.url}" target="_blank" rel="noopener noreferrer" class="card-link-item github-link" onclick="event.stopPropagation()">💻 GitHub Repo →</a>` : `<span class="card-link-item" style="opacity:0.8; cursor:default; border-style:dashed; color:var(--text-muted);" onclick="event.stopPropagation()">🔒 Enterprise Private Repo</span>`}
           <button type="button" class="card-link-item share-link" onclick="event.stopPropagation(); openProjectModal('${p.id}')">🔍 View Details & Share</button>
         </div>
       `;
