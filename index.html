@@ -2160,6 +2160,46 @@
 
             <!-- PANEL 3: SKILLS & CATEGORIES MANAGER -->
             <div id="panel-skills" class="admin-panel">
+              <!-- BULK SKILLS JSON MANAGER -->
+              <div class="admin-form-box" style="border: 1px solid rgba(234, 179, 8, 0.4); background: linear-gradient(180deg, rgba(234, 179, 8, 0.05) 0%, rgba(13, 20, 36, 0.8) 100%);">
+                <div class="admin-form-title" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.6rem;">
+                  <span>⚡ Bulk Skills JSON Manager (All-in-One)</span>
+                  <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                    <input type="file" id="adminSkillsJsonFileInput" accept=".json" style="display:none;" onchange="handleAdminSkillsJsonUpload(event)" />
+                    <button type="button" class="btn-gold" style="padding:0.4rem 0.9rem; font-size:0.8rem;" onclick="document.getElementById('adminSkillsJsonFileInput').click()">
+                      📂 Upload JSON File
+                    </button>
+                    <button type="button" class="btn-gold" style="padding:0.4rem 0.9rem; font-size:0.8rem; background:transparent; border:1px solid var(--border-gold-glow);" onclick="loadAiEngineerFdeTemplate()">
+                      ✨ Load AI Engineer / FDE Template
+                    </button>
+                    <button type="button" class="btn-gold" style="padding:0.4rem 0.9rem; font-size:0.8rem; background:transparent; border:1px solid var(--border-gold-glow);" onclick="exportSkillsJson()">
+                      📥 Download JSON
+                    </button>
+                  </div>
+                </div>
+
+                <p style="font-size:0.82rem; color:var(--text-dim); margin-bottom:0.8rem; line-height:1.4;">
+                  Upload a <code>.json</code> file or directly edit the JSON structure below. You can update all skill categories, card groups, and badges all at once and save immediately.
+                </p>
+
+                <div class="form-group" style="margin-bottom:0.8rem;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+                    <label style="font-size:0.8rem; color:var(--gold-bright);">Skills JSON Editor:</label>
+                    <button type="button" style="background:none; border:none; color:var(--gold-bright); font-size:0.75rem; cursor:pointer; text-decoration:underline;" onclick="formatSkillsJsonEditor()">
+                      Indent / Format JSON
+                    </button>
+                  </div>
+                  <textarea id="adminSkillsJsonEditor" rows="16" spellcheck="false" style="font-family:'Courier New', monospace; font-size:0.82rem; width:100%; background:#060b16; color:#93c5fd; border:1px solid rgba(234, 179, 8, 0.3); border-radius:6px; padding:0.8rem; line-height:1.4; resize:vertical;"></textarea>
+                </div>
+
+                <div style="display:flex; gap:0.8rem; align-items:center; flex-wrap:wrap;">
+                  <button type="button" class="btn-gold" style="padding:0.65rem 1.6rem; font-weight:600;" onclick="handleSaveSkillsJson()">
+                    💾 Save & Apply Skills JSON to Portfolio
+                  </button>
+                  <span id="skillsJsonStatus" style="font-size:0.82rem; color:var(--gold-bright);"></span>
+                </div>
+              </div>
+
               <!-- Manage Skill Categories -->
               <div class="admin-form-box">
                 <div class="admin-form-title"><span>🏷️</span> Manage Skill Categories</div>
@@ -2659,16 +2699,110 @@ destructive_action_in_freeze {
       resumeSummary: "Results-driven AI Engineer with hands-on expertise building production Generative AI, Retrieval-Augmented Generation (RAG), and Autonomous Multi-Agent systems. Industry specialist in AI Governance, implementing cryptographic machine attestation with SPIFFE/SPIRE, enterprise identity with Keycloak, and policy enforcement engines with Open Policy Agent (OPA)."
     },
     skillCategories: [
-      { id: 'ai', name: 'AI & LLMs', icon: '🧠' },
-      { id: 'governance', name: 'GOVERNANCE & SECURITY', icon: '🔐' },
-      { id: 'backend', name: 'BACKEND & CLOUD', icon: '⚙️' },
-      { id: 'data', name: 'DATA & VECTOR', icon: '📊' }
+      { id: "agentic_ai", name: "AGENTIC AI & MULTI-AGENT", icon: "🤖" },
+      { id: "rag_search", name: "ENTERPRISE RAG & VECTOR", icon: "🔍" },
+      { id: "fde_delivery", name: "FORWARD DEPLOYED & CLIENT", icon: "🚀" },
+      { id: "backend_api", name: "BACKEND & DATA SYSTEMS", icon: "⚙️" },
+      { id: "eval_safety", name: "EVALS, SAFETY & GOVERNANCE", icon: "🛡️" },
+      { id: "cloud_llmops", name: "CLOUD & LLMOPS", icon: "☁️" }
     ],
     skills: [
-      { id: '1', category: 'ai', title: 'AI & Agent Orchestration', icon: '🧠', items: ['LangChain', 'LangGraph', 'Autonomous Agents', 'Multi-Agent Systems', 'Prompt Engineering', 'NeMo Guardrails', 'Agent Evaluation'] },
-      { id: '2', category: 'governance', title: 'Identity & Governance', icon: '🔐', items: ['Keycloak (IAM / IGA)', 'SPIFFE / SPIRE', 'Open Policy Agent (OPA)', 'Rego Policies', 'OAuth2.0 / OpenID Connect', 'Mutual TLS (mTLS)', 'Zero Trust Architecture'] },
-      { id: '3', category: 'backend', title: 'Backend & Cloud', icon: '⚙️', items: ['Python (AsyncIO)', 'FastAPI', 'Docker', 'Kubernetes', 'Microservices', 'REST & WebSockets', 'CI/CD Pipelines'] },
-      { id: '4', category: 'data', title: 'Data & Vector Systems', icon: '📊', items: ['Vector DBs (Qdrant, Chroma)', 'Hybrid Search (BM25 + Dense)', 'Re-ranking Models', 'PostgreSQL', 'Redis', 'Embedding Generation'] }
+      {
+        id: "skill_agents",
+        category: "agentic_ai",
+        title: "Agentic AI & Multi-Agent Orchestration",
+        icon: "🤖",
+        items: [
+          "LangGraph",
+          "Multi-Agent Supervisors",
+          "Autonomous ReAct Loops",
+          "Tool Calling & Schema Binding",
+          "Human-in-the-Loop (HITL)",
+          "Stateful Memory & Checkpointing",
+          "Agent Sandboxes (E2B / Docker)",
+          "Plan-and-Solve Architectures"
+        ]
+      },
+      {
+        id: "skill_rag",
+        category: "rag_search",
+        title: "Enterprise RAG & Information Retrieval",
+        icon: "🔍",
+        items: [
+          "Hybrid Search (Dense + BM25)",
+          "Vector DBs (Qdrant, Pinecone, Chroma)",
+          "Cohere Cross-Encoder Re-ranking",
+          "Context Compression & Filtering",
+          "LlamaParse & PDF Extraction",
+          "Query Routing & Semantic Chunking",
+          "GraphRAG & Knowledge Graphs",
+          "Multi-Tenant Vector Isolation"
+        ]
+      },
+      {
+        id: "skill_fde",
+        category: "fde_delivery",
+        title: "Forward Deployed & Client Engineering",
+        icon: "🚀",
+        items: [
+          "POC-to-Production Velocity",
+          "Document Intelligence (Invoices / AP / AR)",
+          "Enterprise API & ERP Integration",
+          "Client Discovery & Technical Scoping",
+          "Deterministic Fallback Strategies",
+          "Latency & Token Cost Optimization",
+          "Stakeholder Alignment & Demo Delivery",
+          "On-Premise & VPC Deployments"
+        ]
+      },
+      {
+        id: "skill_backend",
+        category: "backend_api",
+        title: "Production Backend & Data Engineering",
+        icon: "⚙️",
+        items: [
+          "Python (AsyncIO, Pydantic v2)",
+          "FastAPI & Streaming (SSE / WebSockets)",
+          "PostgreSQL & SQLAlchemy ORM",
+          "Redis (Distributed Caching & Queues)",
+          "Celery Background Task Workers",
+          "Docker & Container Orchestration",
+          "RESTful Microservice Architecture",
+          "Automated CI/CD Workflows"
+        ]
+      },
+      {
+        id: "skill_eval",
+        category: "eval_safety",
+        title: "LLM Evaluation, Safety & Governance",
+        icon: "🛡️",
+        items: [
+          "Ragas & DeepEval Frameworks",
+          "LLM-as-a-Judge Synthetic Evals",
+          "NeMo Guardrails & Llama Guard",
+          "Prompt Injection & Jailbreak Defense",
+          "PII Redaction & Compliance (DLP)",
+          "Open Policy Agent (OPA & Rego)",
+          "Hallucination & Faithfulness Scoring",
+          "Zero-Trust Workload Identity (SPIFFE)"
+        ]
+      },
+      {
+        id: "skill_cloud",
+        category: "cloud_llmops",
+        title: "Cloud Infrastructure & LLMOps",
+        icon: "☁️",
+        items: [
+          "AWS Bedrock (Claude 3.5, Titan)",
+          "Azure OpenAI Services",
+          "LangSmith Tracing & Observability",
+          "OpenTelemetry Instrumentation",
+          "High-Throughput Serving (vLLM, Ollama)",
+          "Rate Limiting & Token Budgeting",
+          "GitHub Actions CI/CD Automation",
+          "Cost Monitoring & SLI/SLO Alerting"
+        ]
+      }
     ],
     projectCategories: [
       { id: 'agents', name: 'AI AGENTS' },
@@ -2862,6 +2996,12 @@ destructive_action_in_freeze {
           parsed.texts = Object.assign({}, DEFAULT_DATA.texts, parsed.texts);
           delete parsed.texts.factIdentityLabel;
           delete parsed.texts.factIdentity;
+
+          // If skillCategories has legacy 4 categories, upgrade to comprehensive AI Engineer & FDE skills:
+          if (parsed.skillCategories && (parsed.skillCategories.length === 4 && parsed.skillCategories.some(c => c.id === 'governance'))) {
+            parsed.skillCategories = JSON.parse(JSON.stringify(DEFAULT_DATA.skillCategories));
+            parsed.skills = JSON.parse(JSON.stringify(DEFAULT_DATA.skills));
+          }
           return parsed;
         }
       } catch (e) { }
@@ -3650,6 +3790,10 @@ destructive_action_in_freeze {
     document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
     const target = document.getElementById('panel-' + tabName);
     if (target) target.classList.add('active');
+
+    if (tabName === 'skills') {
+      populateSkillsJsonEditor();
+    }
   }
 
   /* ─── POPULATE ADMIN FORMS ─── */
@@ -3702,6 +3846,7 @@ destructive_action_in_freeze {
 
     // Category Select Dropdowns in Admin
     populateCategoryDropdowns();
+    populateSkillsJsonEditor();
   }
 
   function populateCategoryDropdowns() {
@@ -3824,6 +3969,224 @@ destructive_action_in_freeze {
     t.resumeSummary = document.getElementById('formResumeSummary').value;
     saveData();
     showToast('✅ Resume Header & Summary updated!');
+  }
+
+  /* ─── BULK SKILLS JSON ACTIONS ─── */
+  const AI_ENGINEER_FDE_SKILLS_TEMPLATE = {
+    skillCategories: [
+      { id: "agentic_ai", name: "AGENTIC AI & MULTI-AGENT", icon: "🤖" },
+      { id: "rag_search", name: "ENTERPRISE RAG & VECTOR", icon: "🔍" },
+      { id: "fde_delivery", name: "FORWARD DEPLOYED & CLIENT", icon: "🚀" },
+      { id: "backend_api", name: "BACKEND & DATA SYSTEMS", icon: "⚙️" },
+      { id: "eval_safety", name: "EVALS, SAFETY & GOVERNANCE", icon: "🛡️" },
+      { id: "cloud_llmops", name: "CLOUD & LLMOPS", icon: "☁️" }
+    ],
+    skills: [
+      {
+        id: "skill_agents",
+        category: "agentic_ai",
+        title: "Agentic AI & Multi-Agent Orchestration",
+        icon: "🤖",
+        items: [
+          "LangGraph",
+          "Multi-Agent Supervisors",
+          "Autonomous ReAct Loops",
+          "Tool Calling & Schema Binding",
+          "Human-in-the-Loop (HITL)",
+          "Stateful Memory & Checkpointing",
+          "Agent Sandboxes (E2B / Docker)",
+          "Plan-and-Solve Architectures"
+        ]
+      },
+      {
+        id: "skill_rag",
+        category: "rag_search",
+        title: "Enterprise RAG & Information Retrieval",
+        icon: "🔍",
+        items: [
+          "Hybrid Search (Dense + BM25)",
+          "Vector DBs (Qdrant, Pinecone, Chroma)",
+          "Cohere Cross-Encoder Re-ranking",
+          "Context Compression & Filtering",
+          "LlamaParse & PDF Extraction",
+          "Query Routing & Semantic Chunking",
+          "GraphRAG & Knowledge Graphs",
+          "Multi-Tenant Vector Isolation"
+        ]
+      },
+      {
+        id: "skill_fde",
+        category: "fde_delivery",
+        title: "Forward Deployed & Client Engineering",
+        icon: "🚀",
+        items: [
+          "POC-to-Production Velocity",
+          "Document Intelligence (Invoices / AP / AR)",
+          "Enterprise API & ERP Integration",
+          "Client Discovery & Technical Scoping",
+          "Deterministic Fallback Strategies",
+          "Latency & Token Cost Optimization",
+          "Stakeholder Alignment & Demo Delivery",
+          "On-Premise & VPC Deployments"
+        ]
+      },
+      {
+        id: "skill_backend",
+        category: "backend_api",
+        title: "Production Backend & Data Engineering",
+        icon: "⚙️",
+        items: [
+          "Python (AsyncIO, Pydantic v2)",
+          "FastAPI & Streaming (SSE / WebSockets)",
+          "PostgreSQL & SQLAlchemy ORM",
+          "Redis (Distributed Caching & Queues)",
+          "Celery Background Task Workers",
+          "Docker & Container Orchestration",
+          "RESTful Microservice Architecture",
+          "Automated CI/CD Workflows"
+        ]
+      },
+      {
+        id: "skill_eval",
+        category: "eval_safety",
+        title: "LLM Evaluation, Safety & Governance",
+        icon: "🛡️",
+        items: [
+          "Ragas & DeepEval Frameworks",
+          "LLM-as-a-Judge Synthetic Evals",
+          "NeMo Guardrails & Llama Guard",
+          "Prompt Injection & Jailbreak Defense",
+          "PII Redaction & Compliance (DLP)",
+          "Open Policy Agent (OPA & Rego)",
+          "Hallucination & Faithfulness Scoring",
+          "Zero-Trust Workload Identity (SPIFFE)"
+        ]
+      },
+      {
+        id: "skill_cloud",
+        category: "cloud_llmops",
+        title: "Cloud Infrastructure & LLMOps",
+        icon: "☁️",
+        items: [
+          "AWS Bedrock (Claude 3.5, Titan)",
+          "Azure OpenAI Services",
+          "LangSmith Tracing & Observability",
+          "OpenTelemetry Instrumentation",
+          "High-Throughput Serving (vLLM, Ollama)",
+          "Rate Limiting & Token Budgeting",
+          "GitHub Actions CI/CD Automation",
+          "Cost Monitoring & SLI/SLO Alerting"
+        ]
+      }
+    ]
+  };
+
+  function populateSkillsJsonEditor() {
+    const editor = document.getElementById('adminSkillsJsonEditor');
+    if (editor) {
+      const data = {
+        skillCategories: appData.skillCategories || [],
+        skills: appData.skills || []
+      };
+      editor.value = JSON.stringify(data, null, 2);
+    }
+  }
+
+  function handleAdminSkillsJsonUpload(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const json = JSON.parse(e.target.result);
+        const editor = document.getElementById('adminSkillsJsonEditor');
+        if (editor) {
+          editor.value = JSON.stringify(json, null, 2);
+        }
+        applyParsedSkillsJson(json);
+        showToast('✅ Skills JSON uploaded & applied to live site!');
+      } catch (err) {
+        alert('Invalid JSON in uploaded file: ' + err.message);
+      }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+  }
+
+  function handleSaveSkillsJson() {
+    const editor = document.getElementById('adminSkillsJsonEditor');
+    if (!editor) return;
+    try {
+      const parsed = JSON.parse(editor.value);
+      applyParsedSkillsJson(parsed);
+      showToast('✅ Skills updated & saved to live site!');
+    } catch (err) {
+      alert('Invalid JSON syntax: ' + err.message);
+    }
+  }
+
+  function applyParsedSkillsJson(data) {
+    if (Array.isArray(data)) {
+      appData.skills = data;
+      const catsMap = {};
+      data.forEach(g => {
+        if (g.category && !catsMap[g.category]) {
+          catsMap[g.category] = { id: g.category, name: (g.title || g.category).toUpperCase(), icon: g.icon || '⚡' };
+        }
+      });
+      appData.skillCategories = Object.values(catsMap);
+    } else if (typeof data === 'object' && data !== null) {
+      if (Array.isArray(data.skillCategories)) {
+        appData.skillCategories = data.skillCategories;
+      }
+      if (Array.isArray(data.skills)) {
+        appData.skills = data.skills;
+      }
+    }
+    saveData();
+    populateSkillsJsonEditor();
+    populateCategoryDropdowns();
+  }
+
+  function formatSkillsJsonEditor() {
+    const editor = document.getElementById('adminSkillsJsonEditor');
+    if (!editor) return;
+    try {
+      const parsed = JSON.parse(editor.value);
+      editor.value = JSON.stringify(parsed, null, 2);
+      showToast('Formatted JSON cleanly.');
+    } catch (err) {
+      alert('Could not format: invalid JSON syntax (' + err.message + ')');
+    }
+  }
+
+  function exportSkillsJson() {
+    const data = {
+      skillCategories: appData.skillCategories || [],
+      skills: appData.skills || []
+    };
+    const jsonStr = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'skills-ai-engineer-fde.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showToast('📥 Downloaded skills-ai-engineer-fde.json');
+  }
+
+  function loadAiEngineerFdeTemplate() {
+    if (confirm('Load the comprehensive AI Engineer & Forward Deployed Engineer (FDE) skills template into the editor and apply to portfolio?')) {
+      const editor = document.getElementById('adminSkillsJsonEditor');
+      if (editor) {
+        editor.value = JSON.stringify(AI_ENGINEER_FDE_SKILLS_TEMPLATE, null, 2);
+      }
+      applyParsedSkillsJson(AI_ENGINEER_FDE_SKILLS_TEMPLATE);
+      showToast('✅ AI Engineer & FDE Skills template loaded!');
+    }
   }
 
   /* ─── DYNAMIC SKILL CATEGORY ACTIONS ─── */
