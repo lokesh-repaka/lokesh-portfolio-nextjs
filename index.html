@@ -2837,6 +2837,16 @@ destructive_action_in_freeze {
         url: 'https://github.com/lokesh-repaka/CloudDesk',
         liveUrl: 'https://clouddesk-lokesh.vercel.app',
         theme: 'blue'
+      },
+      {
+        id: 'apexmotion_risk',
+        title: 'ApexMotion — Supplier Risk Intelligence Platform',
+        category: 'agents',
+        desc: 'Enterprise-grade, human-in-the-loop Supplier Risk Intelligence & Operational Governance Platform engineered for ApexMotion (Tier-1 EV parts manufacturer with 4,500 suppliers across 38 countries). Pairs a 5-specialist LangGraph multi-agent swarm with Amazon Neptune multi-tier graph traversal (400k nodes), a deterministic zero-hallucination Python risk math engine (Days of Cover & Financial Exposure), and AWS KMS ECDSA P-256 cryptographically-signed HITL spend approval gates with dual-signature thresholds for spend > k. Fully validated with 1,202/1,202 offline automated tests (1,086 Pytest + 116 Vitest).',
+        tags: ['LangGraph', 'FastAPI', 'React 18', 'Amazon Neptune', 'Apache Kafka', 'AWS KMS ECDSA', 'OpenSearch', 'Docker'],
+        url: 'https://github.com/lokesh-repaka/apexmotion-supplier-risk-intelligence',
+        liveUrl: 'https://apexmotion-supplier-risk.vercel.app',
+        theme: 'green'
       }
     ],
     blogCategories: [
@@ -2928,42 +2938,35 @@ destructive_action_in_freeze {
       projects: [
         {
           id: 'rp1',
-          title: "PolicyPilot — Deterministic Zero-Trust AI Policy Gate",
-          role: "Lead Architect & Developer",
+          title: "Enterprise AP Invoice Automation Platform (ApexAP)",
+          role: "Lead AI & Backend Architect",
           duration: "2024 – 2025",
           bullets: [
-            "Architected deterministic zero-trust policy engine using Open Policy Agent (OPA/Rego) and Keycloak to prevent prompt injection and unauthorized tool calls.",
-            "Implemented short-lived cryptographic workload attestation with SPIFFE/SPIRE to prevent privilege escalation."
+            "Architected an autonomous, audit-grade Accounts Payable invoice processing system pairing multi-modal AI vision with a deterministic Python math validation engine, achieving a 90.00% Straight-Through Processing (STP) rate (exceeding ≥65% target).",
+            "Implemented automated 3-way PO matching (Invoice vs PO vs Goods Receipt) with line-item tolerance gating and legally binding 7-year immutable WORM audit compliance on Azure Blob Storage.",
+            "Engineered full CI/CD test automation delivering 755/755 passing offline test suites covering multi-currency handling (USD, EUR, GBP) and European VAT/tax compliance."
           ]
         },
         {
           id: 'rp2',
-          title: "RAG Studio — Enterprise Knowledge Retrieval Platform",
-          role: "AI Systems Engineer",
+          title: "CloudDesk — Autonomous Support Resolution Platform",
+          role: "Lead Agentic AI Engineer",
           duration: "2024",
           bullets: [
-            "Built high-throughput enterprise RAG engine supporting hybrid keyword/dense retrieval (Qdrant + BM25) and Cohere cross-encoder re-ranking.",
-            "Implemented citation verification and automated hallucination scoring with Ragas to reduce hallucinations below 1.5%."
+            "Engineered an enterprise multi-agent support resolution platform with a 6-specialist LangGraph stateful supervisor swarm (Customer, Knowledge, Troubleshooting, Resolution, Escalation).",
+            "Implemented deterministic policy safety gates and Human-in-the-Loop (HITL) approval workflows for high-risk operations including billing overrides and refund authorizations.",
+            "Integrated hybrid retrieval (dense vector embeddings + BM25 keyword search in Qdrant) with complete OpenTelemetry distributed tracing and Prometheus/Grafana SLA monitoring."
           ]
         },
         {
           id: 'rp3',
-          title: "NovaEnterprise AI — Multi-Tenant Agent Supervisor Platform",
-          role: "Lead AI Engineer",
+          title: "ApexMotion — Supplier Risk Intelligence Platform",
+          role: "Lead AI & Distributed Systems Engineer",
           duration: "2024",
           bullets: [
-            "Engineered multi-tenant autonomous agent platform utilizing LangGraph stateful supervisor graphs with checkpointing and human-in-the-loop validation.",
-            "Implemented workspace sandboxing with Docker, departmental token budgeting, and rate-limiting."
-          ]
-        },
-        {
-          id: 'rp4',
-          title: "LangChain Agent Evaluation System",
-          role: "AI Engineer",
-          duration: "2024",
-          bullets: [
-            "Engineered comprehensive benchmarking suite for LLM agents measuring tool selection accuracy, step latency, and contextual relevance.",
-            "Automated synthetic test dataset generation and LLM-as-a-judge scoring pipelines for production model deployments."
+            "Architected a real-time supply chain disruption governance platform for a Tier-1 EV manufacturer managing 4,500 global suppliers across 38 countries using Amazon Neptune graph traversals (400k nodes).",
+            "Engineered a zero-hallucination Python risk engine for deterministic Days of Cover (DoC) and multi-million dollar disruption exposure calculations, paired with an event-driven 5-agent LangGraph swarm.",
+            "Implemented cryptographic Human-in-the-Loop (HITL) spend approval gating backed by AWS KMS ECDSA P-256 digital signatures with dual-authorization enforcement for expenditures > k, backed by 1,202 automated offline tests."
           ]
         }
       ],
@@ -3022,7 +3025,7 @@ destructive_action_in_freeze {
           }
 
           // If resume experience has legacy placeholder data or missing Genpact experience, upgrade resume to real credentials:
-          if (!parsed.resume || !parsed.resume.experience || parsed.resume.experience.some(e => e.company === "Open Source / Independent" || e.title.includes("Enterprise AI Governance"))) {
+          if (!parsed.resume || !parsed.resume.experience || parsed.resume.experience.some(e => e.company === "Open Source / Independent" || e.title.includes("Enterprise AI Governance")) || !parsed.resume.projects || parsed.resume.projects.some(p => p.id === 'rp4' || p.title.includes("PolicyPilot"))) {
             parsed.resume = JSON.parse(JSON.stringify(DEFAULT_DATA.resume));
             parsed.texts.resumeContact = DEFAULT_DATA.texts.resumeContact;
             parsed.texts.resumeSummary = DEFAULT_DATA.texts.resumeSummary;
@@ -3034,7 +3037,7 @@ destructive_action_in_freeze {
           }
 
           // If projects contains legacy projects (p1, p2, etc.) or is missing clouddesk_support, ensure both enterprise projects are present:
-          if (!parsed.projects || parsed.projects.some(p => p.id === 'p1' || p.id === 'p2' || p.id === 'p3' || p.id === 'p4') || !parsed.projects.some(p => p.id === 'clouddesk_support')) {
+          if (!parsed.projects || parsed.projects.some(p => p.id === 'p1' || p.id === 'p2' || p.id === 'p3' || p.id === 'p4') || !parsed.projects.some(p => p.id === 'clouddesk_support') || !parsed.projects.some(p => p.id === 'apexmotion_risk')) {
             parsed.projects = JSON.parse(JSON.stringify(DEFAULT_DATA.projects));
             parsed.projectCategories = JSON.parse(JSON.stringify(DEFAULT_DATA.projectCategories));
           }
