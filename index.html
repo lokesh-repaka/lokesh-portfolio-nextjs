@@ -3037,7 +3037,8 @@ destructive_action_in_freeze {
   let currentReadingArticle = null;
 
   function loadData() {
-    const saved = localStorage.getItem('lokesh_portfolio_data_v3');
+    // Prioritize lokesh_portfolio_data_v2 where user's photo, home, and about customizations are stored
+    const saved = localStorage.getItem('lokesh_portfolio_data_v2') || localStorage.getItem('lokesh_portfolio_data_v3') || localStorage.getItem('lokesh_portfolio_data');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -3057,6 +3058,7 @@ destructive_action_in_freeze {
           if (!parsed.texts.factAvail || parsed.texts.factAvail === 'Immediate') {
             parsed.texts.factAvail = DEFAULT_DATA.texts.factAvail;
           }
+          // Preserve all user customized texts (photo, hero, about me, cards) on top of defaults
           parsed.texts = Object.assign({}, DEFAULT_DATA.texts, parsed.texts);
           delete parsed.texts.factIdentityLabel;
           delete parsed.texts.factIdentity;
@@ -3087,16 +3089,18 @@ destructive_action_in_freeze {
 
           // Always synchronize latest metadata, client descriptions, and links:
           if (parsed.projects) {
-            parsed.projects.forEach(p => {
-              const defP = DEFAULT_DATA.projects.find(dp => dp.id === p.id);
-              if (defP) {
-                p.desc = defP.desc;
-                p.title = defP.title;
-                p.tags = defP.tags;
-                p.url = defP.url;
-                p.liveUrl = defP.liveUrl;
-                p.category = defP.category;
-                p.theme = defP.theme;
+            DEFAULT_DATA.projects.forEach(defP => {
+              const existing = parsed.projects.find(p => p.id === defP.id);
+              if (existing) {
+                existing.desc = defP.desc;
+                existing.title = defP.title;
+                existing.tags = defP.tags;
+                existing.url = defP.url;
+                existing.liveUrl = defP.liveUrl;
+                existing.category = defP.category;
+                existing.theme = defP.theme;
+              } else {
+                parsed.projects.push(JSON.parse(JSON.stringify(defP)));
               }
             });
             parsed.projectCategories = JSON.parse(JSON.stringify(DEFAULT_DATA.projectCategories));
@@ -3104,6 +3108,13 @@ destructive_action_in_freeze {
           if (parsed.resume) {
             parsed.resume.projects = JSON.parse(JSON.stringify(DEFAULT_DATA.resume.projects));
           }
+
+          // Keep both keys synchronized
+          try {
+            const dataStr = JSON.stringify(parsed);
+            localStorage.setItem('lokesh_portfolio_data_v2', dataStr);
+            localStorage.setItem('lokesh_portfolio_data_v3', dataStr);
+          } catch (e) { }
 
           return parsed;
         }
@@ -3113,7 +3124,9 @@ destructive_action_in_freeze {
   }
 
   function saveData() {
-    localStorage.setItem('lokesh_portfolio_data_v3', JSON.stringify(appData));
+    const dataStr = JSON.stringify(appData);
+    localStorage.setItem('lokesh_portfolio_data_v2', dataStr);
+    localStorage.setItem('lokesh_portfolio_data_v3', dataStr);
     renderPublicSite();
     populateAdminForms();
     renderAdminLists();
