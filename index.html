@@ -2814,7 +2814,8 @@ destructive_action_in_freeze {
       }
     ],
     projectCategories: [
-      { id: 'automation', name: 'ENTERPRISE AI & AUTOMATION' }
+      { id: 'automation', name: 'ENTERPRISE AI & AUTOMATION' },
+      { id: 'agents', name: 'AGENTIC AI & MULTI-AGENT SYSTEMS' }
     ],
     projects: [
       {
@@ -2826,6 +2827,16 @@ destructive_action_in_freeze {
         url: 'https://github.com/lokesh-repaka/enterprise-ap-invoice-automation',
         liveUrl: 'https://enterprise-ap-invoice-automation.vercel.app',
         theme: 'amber'
+      },
+      {
+        id: 'clouddesk_support',
+        title: 'CloudDesk — Autonomous Support Resolution Platform',
+        category: 'agents',
+        desc: 'Enterprise-grade, human-in-the-loop Support Resolution & AI Copilot Platform engineered for cloud SaaS operations. Orchestrates a 6-specialist LangGraph agent swarm (Supervisor, Customer, Knowledge, Troubleshooting, Resolution, Escalation) with deterministic policy safety rules, hybrid dense vector + BM25 documentation retrieval (Qdrant + RRF), and stateful human approval gates via LangGraph interrupt(). Zero-touch refunds and unauthorized settings mutations are mathematically prevented. Fully verified with 950/950 offline automated test suites passing (915 Pytest + 35 Vitest).',
+        tags: ['LangGraph', 'FastAPI', 'Next.js 15', 'Hybrid RAG', 'Human-in-the-Loop', 'Qdrant', 'Redis', 'Docker'],
+        url: 'https://github.com/lokesh-repaka/CloudDesk',
+        liveUrl: 'https://clouddesk-lokesh.vercel.app',
+        theme: 'blue'
       }
     ],
     blogCategories: [
@@ -3022,8 +3033,8 @@ destructive_action_in_freeze {
             parsed.resume.certifications = DEFAULT_DATA.resume.certifications;
           }
 
-          // If projects contains legacy projects (p1, p2, etc.), replace with enterprise-ap-invoice-automation only:
-          if (parsed.projects && parsed.projects.some(p => p.id === 'p1' || p.id === 'p2' || p.id === 'p3' || p.id === 'p4')) {
+          // If projects contains legacy projects (p1, p2, etc.) or is missing clouddesk_support, ensure both enterprise projects are present:
+          if (!parsed.projects || parsed.projects.some(p => p.id === 'p1' || p.id === 'p2' || p.id === 'p3' || p.id === 'p4') || !parsed.projects.some(p => p.id === 'clouddesk_support')) {
             parsed.projects = JSON.parse(JSON.stringify(DEFAULT_DATA.projects));
             parsed.projectCategories = JSON.parse(JSON.stringify(DEFAULT_DATA.projectCategories));
           }
