@@ -2858,6 +2858,16 @@ destructive_action_in_freeze {
         url: '',
         liveUrl: 'https://rag-studio-web-three.vercel.app/designer',
         theme: 'purple'
+      },
+      {
+        id: 'anomaly_engine',
+        title: 'AnomalyEngine — Enterprise Multi-Tier Financial Fraud & Risk Detection Platform',
+        category: 'automation',
+        desc: 'High-throughput financial fraud and risk detection engine engineered for mission-critical banking ledgers and enterprise payment rails. Screens transactions in sub-15ms P99 latency across a 5-tier defense pipeline combining deterministic statutory compliance rules, dynamic vendor contract validations, statistical rolling baselines (Welford Z-scores), and unsupervised Isolation Forest machine learning. Automatically synthesizes explainable GenAI compliance dossiers for flagged incidents, accelerating regulatory audit triage while guaranteeing zero generative math on financial limits.\n\n⚠️ Deployment Note: In this live serverless cloud demonstration, the 842 MB Laya neural decision engine operates in high-speed simulated API mode to comply with serverless execution boundaries, while Tiers 1, 1b, 2, and 3 (Isolation Forest ML) and LLM explainability execute live in real time.',
+        tags: ['FastAPI', 'Python 3.12', 'React 18', 'Scikit-Learn', 'Isolation Forest', 'Sub-15ms P99', 'GenAI Audit', 'Vercel'],
+        url: 'https://github.com/lokesh-repaka/anomaly-engine',
+        liveUrl: 'https://anomaly-engine-two.vercel.app',
+        theme: 'cyan'
       }
     ],
     blogCategories: [
@@ -2990,6 +3000,17 @@ destructive_action_in_freeze {
             "Eliminated manual RAG guesswork by engineering an autonomous 6-specialist LangGraph optimization swarm ('AutoRAG Architect') that empirically benchmarks pipeline permutations against RAGAS metrics (faithfulness, context precision, answer relevancy), reducing hallucination rates below 1.2%.",
             "Engineered real-time cloud cost and p95 latency trade-off estimation, collapsing enterprise RAG deployment lifecycles from 3 months to 2 days, and deployed the production reference Q&A engine (DocuMind AI) on GCP Cloud Run and Qdrant."
           ]
+        },
+        {
+          id: 'rp5',
+          title: "AnomalyEngine — Enterprise Multi-Tier Financial Fraud & Risk Platform",
+          role: "Lead Machine Learning & Backend Architect",
+          duration: "2024",
+          bullets: [
+            "Architected an enterprise multi-tier transaction fraud and anomaly detection platform delivering sub-15ms P99 screening latency across high-throughput financial ledgers.",
+            "Implemented a 5-tier hybrid defense pipeline combining deterministic AST business rules, vendor contract clause validations, statistical rolling Z-score baselines, and unsupervised Isolation Forest ML.",
+            "Engineered autonomous GenAI compliance reporting synthesizing primary-source audit evidence citations and recommended remediation protocols for financial regulatory triage."
+          ]
         }
       ],
       certifications: [
@@ -3016,7 +3037,7 @@ destructive_action_in_freeze {
   let currentReadingArticle = null;
 
   function loadData() {
-    const saved = localStorage.getItem('lokesh_portfolio_data_v2');
+    const saved = localStorage.getItem('lokesh_portfolio_data_v3');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -3058,8 +3079,8 @@ destructive_action_in_freeze {
             parsed.resume.certifications = DEFAULT_DATA.resume.certifications;
           }
 
-          // If projects contains legacy projects or is missing any of the 4 enterprise projects, reload:
-          if (!parsed.projects || parsed.projects.some(p => p.id === 'p1' || p.id === 'p2' || p.id === 'p3' || p.id === 'p4') || !parsed.projects.some(p => p.id === 'clouddesk_support') || !parsed.projects.some(p => p.id === 'apexmotion_risk') || !parsed.projects.some(p => p.id === 'rag_studio')) {
+          // If projects contains legacy projects or is missing any of the 5 enterprise projects, reload:
+          if (!parsed.projects || parsed.projects.some(p => p.id === 'p1' || p.id === 'p2' || p.id === 'p3' || p.id === 'p4') || !parsed.projects.some(p => p.id === 'clouddesk_support') || !parsed.projects.some(p => p.id === 'apexmotion_risk') || !parsed.projects.some(p => p.id === 'rag_studio') || !parsed.projects.some(p => p.id === 'anomaly_engine')) {
             parsed.projects = JSON.parse(JSON.stringify(DEFAULT_DATA.projects));
             parsed.projectCategories = JSON.parse(JSON.stringify(DEFAULT_DATA.projectCategories));
           }
@@ -3092,7 +3113,7 @@ destructive_action_in_freeze {
   }
 
   function saveData() {
-    localStorage.setItem('lokesh_portfolio_data_v2', JSON.stringify(appData));
+    localStorage.setItem('lokesh_portfolio_data_v3', JSON.stringify(appData));
     renderPublicSite();
     populateAdminForms();
     renderAdminLists();
@@ -3330,7 +3351,7 @@ destructive_action_in_freeze {
     if (!proj) return;
 
     currentViewingProject = proj;
-    const icons = { amber: '🛡️', blue: '🔍', purple: '🧠', green: '⚡' };
+    const icons = { amber: '🛡️', blue: '🔍', purple: '🧠', green: '⚡', cyan: '🛡️' };
     const icon = icons[proj.theme] || '⚙️';
 
     document.getElementById('modalProjIcon').innerText = icon;
@@ -3747,7 +3768,7 @@ destructive_action_in_freeze {
       });
 
       // Icon per theme
-      const icons = { amber: '🛡️', blue: '🔍', purple: '🧠', green: '⚡' };
+      const icons = { amber: '🛡️', blue: '🔍', purple: '🧠', green: '⚡', cyan: '🛡️' };
       const icon = icons[p.theme] || '⚙️';
 
       // Build link buttons: Live Website (optional), GitHub Repo (optional) & Share Link
