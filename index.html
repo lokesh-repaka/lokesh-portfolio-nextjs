@@ -2275,8 +2275,8 @@
               </div>
 
               <!-- Add Project Form -->
-              <div class="admin-form-box">
-                <div class="admin-form-title"><span>➕</span> Add New Project Card</div>
+              <div class="admin-form-box" id="adminProjectFormBox">
+                <div class="admin-form-title" id="adminProjectFormTitle"><span>➕</span> Add New Project Card</div>
                 <form onsubmit="handleAdminAddProject(event)">
                   <div class="form-row">
                     <div class="form-group">
@@ -2290,12 +2290,12 @@
                   </div>
                   <div class="form-group">
                     <label>Description</label>
-                    <textarea id="adminProjDesc" rows="3" required placeholder="Describe what this project achieves..."></textarea>
+                    <textarea id="adminProjDesc" rows="4" required placeholder="Describe what this project achieves..."></textarea>
                   </div>
                   <div class="form-row">
                     <div class="form-group">
                       <label>Tags (Comma Separated)</label>
-                      <input type="text" id="adminProjTags" placeholder="e.g. OPA, Rego, Keycloak, FastAPI" />
+                      <input type="text" id="adminProjTags" placeholder="e.g. FastAPI, Python 3.11, React 18, Azure" />
                     </div>
                     <div class="form-group">
                       <label>Dashboard Gradient Color</label>
@@ -2317,9 +2317,14 @@
                       <input type="url" id="adminProjLiveUrl" placeholder="https://your-deployed-app.vercel.app" />
                     </div>
                   </div>
-                  <button type="submit" class="btn-gold" style="padding:0.6rem 1.4rem;">
-                    ➕ Publish Project Card
-                  </button>
+                  <div style="display:flex; gap:0.8rem; align-items:center; flex-wrap:wrap;">
+                    <button type="submit" id="adminProjectSubmitBtn" class="btn-gold" style="padding:0.6rem 1.4rem;">
+                      ➕ Publish Project Card
+                    </button>
+                    <button type="button" id="adminProjectCancelEditBtn" onclick="cancelEditAdminProject()" class="btn-gold" style="display:none; padding:0.6rem 1.2rem; background:transparent; border:1px solid rgba(239,68,68,0.5); color:#ef4444;">
+                      ✕ Cancel Edit
+                    </button>
+                  </div>
                 </form>
               </div>
 
@@ -2809,71 +2814,18 @@ destructive_action_in_freeze {
       }
     ],
     projectCategories: [
-      { id: 'agents', name: 'AI AGENTS' },
-      { id: 'governance', name: 'GOVERNANCE' },
-      { id: 'rag', name: 'RAG SYSTEMS' },
-      { id: 'eval', name: 'EVALUATION' }
+      { id: 'automation', name: 'ENTERPRISE AI & AUTOMATION' }
     ],
     projects: [
       {
-        id: 'p1',
-        title: 'PolicyPilot Governance',
-        category: 'governance',
-        desc: 'Deterministic zero-trust AI policy engine using OPA/Rego and Keycloak to prevent prompt hijacking and tool abuse.',
-        tags: ['OPA Rego', 'Keycloak', 'FastAPI'],
-        url: 'https://github.com/lokesh-repaka/PolicyPilot',
-        liveUrl: '',
+        id: 'enterprise_ap',
+        title: 'Enterprise AP Invoice Automation Platform (ApexAP)',
+        category: 'automation',
+        desc: 'Autonomous, audit-grade Accounts Payable (AP) Invoice Automation Platform engineered for multinational finance operations across US, UK, Germany, and Spain. Pairs multi-modal AI vision extraction with a deterministic zero-hallucination validation rules engine, automated 3-way purchase order (PO) matching (Invoice vs PO vs Goods Receipt), and legally binding 7-year immutable WORM storage on Azure East US 2. Demonstrates an enterprise pilot Straight-Through Processing (STP) rate of 90.00% (exceeding target ≥65%) with 755/755 offline automated test suites passing.',
+        tags: ['FastAPI', 'Python 3.11', 'React 18', 'Azure East US 2', '3-Way PO Matching', 'WORM Storage', 'Docker', 'Vercel'],
+        url: 'https://github.com/lokesh-repaka/enterprise-ap-invoice-automation',
+        liveUrl: 'https://enterprise-ap-invoice-automation.vercel.app',
         theme: 'amber'
-      },
-      {
-        id: 'p2',
-        title: 'RAG Studio',
-        category: 'rag',
-        desc: 'High-recall enterprise RAG platform with dense vector search, BM25 keyword matching, and cross-encoder re-ranking.',
-        tags: ['LangChain', 'Vector DB', 'Python'],
-        url: 'https://github.com/lokesh-repaka/RAG-Studio',
-        liveUrl: '',
-        theme: 'blue'
-      },
-      {
-        id: 'p3',
-        title: 'NovaEnterprise AI',
-        category: 'agents',
-        desc: 'Multi-tenant AI system featuring isolated workspaces, cost-monitoring per department, and agent supervisor graphs.',
-        tags: ['LangGraph', 'Multi-Tenant', 'Docker'],
-        url: 'https://github.com/lokesh-repaka/NovaEnterprise',
-        liveUrl: '',
-        theme: 'purple'
-      },
-      {
-        id: 'p4',
-        title: 'Agent Evaluation System',
-        category: 'eval',
-        desc: 'Comprehensive testing framework for autonomous agents — hallucination scoring, tool accuracy, and latency benchmarking.',
-        tags: ['Benchmarking', 'LangChain', 'Evals'],
-        url: 'https://github.com/lokesh-repaka/LangChain_Agent_Evaluation_System',
-        liveUrl: '',
-        theme: 'amber'
-      },
-      {
-        id: 'p5',
-        title: 'Nemo Guardrails AI',
-        category: 'governance',
-        desc: "Safety enforcement for enterprise conversational AI using NVIDIA's NeMo Guardrails and COLANG dialog control.",
-        tags: ['NeMo Guardrails', 'Safety', 'COLANG'],
-        url: 'https://github.com/lokesh-repaka/Nemo-Guardrails-AI',
-        liveUrl: '',
-        theme: 'green'
-      },
-      {
-        id: 'p6',
-        title: 'CloudDesk AI Support',
-        category: 'agents',
-        desc: 'Autonomous IT helpdesk assistant that diagnoses cloud infrastructure issues and executes remediation playbooks.',
-        tags: ['FastAPI', 'Agents', 'Slack API'],
-        url: 'https://github.com/lokesh-repaka/CloudDesk',
-        liveUrl: '',
-        theme: 'blue'
       }
     ],
     blogCategories: [
@@ -3068,6 +3020,12 @@ destructive_action_in_freeze {
           }
           if (parsed.resume && !parsed.resume.certifications) {
             parsed.resume.certifications = DEFAULT_DATA.resume.certifications;
+          }
+
+          // If projects contains legacy projects (p1, p2, etc.), replace with enterprise-ap-invoice-automation only:
+          if (parsed.projects && parsed.projects.some(p => p.id === 'p1' || p.id === 'p2' || p.id === 'p3' || p.id === 'p4')) {
+            parsed.projects = JSON.parse(JSON.stringify(DEFAULT_DATA.projects));
+            parsed.projectCategories = JSON.parse(JSON.stringify(DEFAULT_DATA.projectCategories));
           }
           return parsed;
         }
@@ -4340,25 +4298,98 @@ destructive_action_in_freeze {
     }
   }
 
-  function handleAdminAddProject(e) {
-    e.preventDefault();
-    const newProj = {
-      id: 'proj_' + Date.now(),
-      title: document.getElementById('adminProjTitle').value.trim(),
-      category: document.getElementById('adminProjCategorySelect').value,
-      desc: document.getElementById('adminProjDesc').value.trim(),
-      tags: document.getElementById('adminProjTags').value.split(',').map(s => s.trim()).filter(Boolean),
-      url: document.getElementById('adminProjUrl').value.trim(),
-      liveUrl: document.getElementById('adminProjLiveUrl') ? document.getElementById('adminProjLiveUrl').value.trim() : '',
-      theme: document.getElementById('adminProjTheme').value
-    };
-    appData.projects.unshift(newProj);
-    saveData();
+  let adminEditingProjectId = null;
+
+  function editAdminProject(projId) {
+    const p = appData.projects.find(x => x.id === projId);
+    if (!p) return;
+    adminEditingProjectId = projId;
+
+    document.getElementById('adminProjTitle').value = p.title || '';
+    if (document.getElementById('adminProjCategorySelect')) {
+      document.getElementById('adminProjCategorySelect').value = p.category || '';
+    }
+    document.getElementById('adminProjDesc').value = p.desc || '';
+    document.getElementById('adminProjTags').value = (p.tags || []).join(', ');
+    if (document.getElementById('adminProjTheme')) {
+      document.getElementById('adminProjTheme').value = p.theme || 'amber';
+    }
+    document.getElementById('adminProjUrl').value = p.url || '';
+    if (document.getElementById('adminProjLiveUrl')) {
+      document.getElementById('adminProjLiveUrl').value = p.liveUrl || '';
+    }
+
+    const titleEl = document.getElementById('adminProjectFormTitle');
+    if (titleEl) titleEl.innerHTML = `<span>✏️</span> Edit Project: ${p.title}`;
+
+    const submitBtn = document.getElementById('adminProjectSubmitBtn');
+    if (submitBtn) submitBtn.innerHTML = `💾 Update Project Details`;
+
+    const cancelBtn = document.getElementById('adminProjectCancelEditBtn');
+    if (cancelBtn) cancelBtn.style.display = 'inline-flex';
+
+    const formBox = document.getElementById('adminProjectFormBox');
+    if (formBox) formBox.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function cancelEditAdminProject() {
+    adminEditingProjectId = null;
     document.getElementById('adminProjTitle').value = '';
     document.getElementById('adminProjDesc').value = '';
     document.getElementById('adminProjTags').value = '';
     document.getElementById('adminProjUrl').value = '';
     if (document.getElementById('adminProjLiveUrl')) document.getElementById('adminProjLiveUrl').value = '';
+
+    const titleEl = document.getElementById('adminProjectFormTitle');
+    if (titleEl) titleEl.innerHTML = `<span>➕</span> Add New Project Card`;
+
+    const submitBtn = document.getElementById('adminProjectSubmitBtn');
+    if (submitBtn) submitBtn.innerHTML = `➕ Publish Project Card`;
+
+    const cancelBtn = document.getElementById('adminProjectCancelEditBtn');
+    if (cancelBtn) cancelBtn.style.display = 'none';
+  }
+
+  function handleAdminAddProject(e) {
+    e.preventDefault();
+    const title = document.getElementById('adminProjTitle').value.trim();
+    const category = document.getElementById('adminProjCategorySelect').value;
+    const desc = document.getElementById('adminProjDesc').value.trim();
+    const tags = document.getElementById('adminProjTags').value.split(',').map(s => s.trim()).filter(Boolean);
+    const url = document.getElementById('adminProjUrl').value.trim();
+    const liveUrl = document.getElementById('adminProjLiveUrl') ? document.getElementById('adminProjLiveUrl').value.trim() : '';
+    const theme = document.getElementById('adminProjTheme').value;
+
+    if (adminEditingProjectId) {
+      const p = appData.projects.find(x => x.id === adminEditingProjectId);
+      if (p) {
+        p.title = title;
+        p.category = category;
+        p.desc = desc;
+        p.tags = tags;
+        p.url = url;
+        p.liveUrl = liveUrl;
+        p.theme = theme;
+        saveData();
+        cancelEditAdminProject();
+        showToast(`✅ Updated project "${title}"!`);
+        return;
+      }
+    }
+
+    const newProj = {
+      id: 'proj_' + Date.now(),
+      title,
+      category,
+      desc,
+      tags,
+      url,
+      liveUrl,
+      theme
+    };
+    appData.projects.unshift(newProj);
+    saveData();
+    cancelEditAdminProject();
     showToast(`✅ Published project "${newProj.title}"!`);
   }
 
@@ -4581,7 +4612,10 @@ destructive_action_in_freeze {
               ${p.url ? `<a href="${p.url}" target="_blank" style="color:var(--gold-bright); text-decoration:none;">💻 GitHub ↗</a>` : ''}
             </div>
           </div>
-          <button class="admin-delete-btn" onclick="deleteAdminProject('${p.id}')">🗑️ Delete</button>
+          <div style="display:flex; gap:0.5rem; align-items:center;">
+            <button class="btn-gold" style="padding:0.35rem 0.8rem; font-size:0.78rem;" onclick="editAdminProject('${p.id}')">✏️ Edit</button>
+            <button class="admin-delete-btn" onclick="deleteAdminProject('${p.id}')">🗑️ Delete</button>
+          </div>
         </div>
       `).join('');
     }
