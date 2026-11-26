@@ -1705,15 +1705,11 @@
           </li>
           <li class="info-item">
             <span class="info-key">Core Stack</span>
-            <span class="info-val" id="display-factStack">Python, LangChain, FastAPI, OPA</span>
-          </li>
-          <li class="info-item">
-            <span class="info-key" id="display-factIdentityLabel">AI Safety & Governance</span>
-            <span class="info-val gold" id="display-factIdentity">Keycloak, IAM/IGA, OPA (Learning & Exploring)</span>
+            <span class="info-val" id="display-factStack">Python, FastAPI, LangGraph, PostgreSQL, LLMs</span>
           </li>
           <li class="info-item">
             <span class="info-key">Availability</span>
-            <span class="info-val gold" id="display-factAvail">Immediate</span>
+            <span class="info-val gold" id="display-factAvail">Open to Part-Time Contracts & Remote Opportunities</span>
           </li>
         </ul>
         <div style="margin-top: 1.8rem; text-align: center;">
@@ -2150,16 +2146,9 @@
                       <input type="text" id="formFactStack" placeholder="Python, FastAPI, LangGraph, PostgreSQL, LLMs" />
                     </div>
                     <div class="form-group">
-                      <label>Secondary Tech Row (Label & Values)</label>
-                      <div style="display:flex; gap:0.5rem;">
-                        <input type="text" id="formFactIdentityLabel" style="width:42%;" placeholder="e.g. AI Safety & Governance" title="Row Label" />
-                        <input type="text" id="formFactIdentity" style="width:58%;" placeholder="Keycloak, IAM/IGA, OPA (Learning & Exploring)" title="Tech / Skills Value" />
-                      </div>
+                      <label>Availability</label>
+                      <input type="text" id="formFactAvail" placeholder="Open to Part-Time Contracts & Remote Opportunities" />
                     </div>
-                  </div>
-                  <div class="form-group">
-                    <label>Availability</label>
-                    <input type="text" id="formFactAvail" placeholder="Immediate" />
                   </div>
 
                   <button type="submit" class="btn-gold" style="padding:0.7rem 1.8rem; margin-top:0.8rem;">
@@ -2662,8 +2651,6 @@ destructive_action_in_freeze {
       factSpec: "Enterprise AI, RAG, Agentic AI & Multi-Agent Systems",
       factLoc: "India | Open to Global Remote Opportunities",
       factStack: "Python, FastAPI, LangGraph, PostgreSQL, LLMs",
-      factIdentityLabel: "AI Safety & Governance",
-      factIdentity: "Keycloak, IAM/IGA, OPA (Learning & Exploring)",
       factAvail: "Open to Part-Time Contracts & Remote Opportunities",
       contactLead: "Whether you are hiring for an AI Engineer role, building mission-critical agent infrastructure, or want to exchange ideas on AI security — my inbox is open.",
       resumeName: "LOKESH REPAKA",
@@ -2857,12 +2844,6 @@ destructive_action_in_freeze {
       try {
         const parsed = JSON.parse(saved);
         if (parsed && parsed.texts) {
-          if (!parsed.texts.factIdentityLabel || parsed.texts.factIdentityLabel === 'Identity Tech') {
-            parsed.texts.factIdentityLabel = DEFAULT_DATA.texts.factIdentityLabel;
-          }
-          if (!parsed.texts.factIdentity || parsed.texts.factIdentity === 'Keycloak, SPIFFE/SPIRE') {
-            parsed.texts.factIdentity = DEFAULT_DATA.texts.factIdentity;
-          }
           if (!parsed.texts.factStack || parsed.texts.factStack === 'Python, LangChain, FastAPI, OPA') {
             parsed.texts.factStack = DEFAULT_DATA.texts.factStack;
           }
@@ -2879,6 +2860,8 @@ destructive_action_in_freeze {
             parsed.texts.factAvail = DEFAULT_DATA.texts.factAvail;
           }
           parsed.texts = Object.assign({}, DEFAULT_DATA.texts, parsed.texts);
+          delete parsed.texts.factIdentityLabel;
+          delete parsed.texts.factIdentity;
           return parsed;
         }
       } catch (e) { }
@@ -3365,13 +3348,9 @@ destructive_action_in_freeze {
     const factLocElem = document.getElementById('display-factLoc');
     if (factLocElem) factLocElem.innerText = t.factLoc || 'India (Open to Remote / Relocation)';
     const factStackElem = document.getElementById('display-factStack');
-    if (factStackElem) factStackElem.innerText = t.factStack || 'Python, LangChain, FastAPI, OPA';
-    const factIdentityLabelElem = document.getElementById('display-factIdentityLabel');
-    if (factIdentityLabelElem) factIdentityLabelElem.innerText = t.factIdentityLabel || 'AI Safety & Governance';
-    const factIdentityElem = document.getElementById('display-factIdentity');
-    if (factIdentityElem) factIdentityElem.innerText = t.factIdentity || 'Keycloak, IAM/IGA, OPA (Learning & Exploring)';
+    if (factStackElem) factStackElem.innerText = t.factStack || 'Python, FastAPI, LangGraph, PostgreSQL, LLMs';
     const factAvailElem = document.getElementById('display-factAvail');
-    if (factAvailElem) factAvailElem.innerText = t.factAvail || 'Immediate';
+    if (factAvailElem) factAvailElem.innerText = t.factAvail || 'Open to Part-Time Contracts & Remote Opportunities';
 
     // Resume
     document.getElementById('display-resumeName').innerText = t.resumeName;
@@ -3712,10 +3691,6 @@ destructive_action_in_freeze {
     if (formFactLoc) formFactLoc.value = t.factLoc || '';
     const formFactStack = document.getElementById('formFactStack');
     if (formFactStack) formFactStack.value = t.factStack || '';
-    const formFactIdentityLabel = document.getElementById('formFactIdentityLabel');
-    if (formFactIdentityLabel) formFactIdentityLabel.value = t.factIdentityLabel || 'AI Safety & Governance';
-    const formFactIdentity = document.getElementById('formFactIdentity');
-    if (formFactIdentity) formFactIdentity.value = t.factIdentity || '';
     const formFactAvail = document.getElementById('formFactAvail');
     if (formFactAvail) formFactAvail.value = t.factAvail || '';
 
@@ -3833,10 +3808,6 @@ destructive_action_in_freeze {
     if (factLoc) t.factLoc = factLoc.value;
     const factStack = document.getElementById('formFactStack');
     if (factStack) t.factStack = factStack.value;
-    const factIdentityLabel = document.getElementById('formFactIdentityLabel');
-    if (factIdentityLabel) t.factIdentityLabel = factIdentityLabel.value;
-    const factIdentity = document.getElementById('formFactIdentity');
-    if (factIdentity) t.factIdentity = factIdentity.value;
     const factAvail = document.getElementById('formFactAvail');
     if (factAvail) t.factAvail = factAvail.value;
 
