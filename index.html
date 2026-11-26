@@ -1785,6 +1785,9 @@
         <div class="resume-section-heading">Key Engineering & Personal Projects</div>
         <div id="display-resumeProjectsList"></div>
 
+        <div class="resume-section-heading">Certifications</div>
+        <div id="display-resumeCertificationsList"></div>
+
         <div class="resume-section-heading">Education</div>
         <div id="display-resumeEducationList"></div>
       </div>
@@ -2694,9 +2697,10 @@ destructive_action_in_freeze {
       factAvail: "Open to Part-Time Contracts & Remote Opportunities",
       contactLead: "Whether you are hiring for an AI Engineer role, building mission-critical agent infrastructure, or want to exchange ideas on AI security — my inbox is open.",
       resumeName: "LOKESH REPAKA",
-      resumeRole: "AI Engineer & AI Governance Architect",
-      resumeContact: "📍 India  |  📧 lokesh.repaka@gmail.com  |  🌐 github.com/lokesh-repaka",
-      resumeSummary: "Results-driven AI Engineer with hands-on expertise building production Generative AI, Retrieval-Augmented Generation (RAG), and Autonomous Multi-Agent systems. Industry specialist in AI Governance, implementing cryptographic machine attestation with SPIFFE/SPIRE, enterprise identity with Keycloak, and policy enforcement engines with Open Policy Agent (OPA)."
+      resumeRole: "Generative AI Engineer | Forward Deployed Engineer",
+      resumeContact: "📍 Hyderabad, India  |  📧 lokeshrepaka4@gmail.com  |  📞 +91 9390305646  |  🌐 github.com/lokesh-repaka",
+      resumeSummary: "Generative AI Engineer with 2+ years of experience in creating production AI-powered solutions, multi-agent architectures, and machine learning pipelines. Skilled in simplifying complex enterprise data challenges and building innovative tools that enhance business operations. Experienced across LangGraph, Enterprise RAG, Document Intelligence, AWS Bedrock, and Azure OpenAI with a proven track record of delivering high-impact, measurable AI solutions.",
+      emailUrl: "lokeshrepaka4@gmail.com",
     },
     skillCategories: [
       { id: "agentic_ai", name: "AGENTIC AI & MULTI-AGENT", icon: "🤖" },
@@ -2925,43 +2929,94 @@ destructive_action_in_freeze {
     ],
     resume: {
       skillsMatrix: [
-        { label: "Generative AI", value: "LangChain, LangGraph, Multi-Agent Orchestration, RAG, NeMo Guardrails, Vector Search" },
-        { label: "Governance & IAM", value: "Keycloak (JML Lifecycle, RBAC), SPIFFE/SPIRE, Open Policy Agent (OPA/Rego), Zero Trust" },
-        { label: "Backend & Cloud", value: "Python, FastAPI, Docker, Kubernetes, PostgreSQL, Redis, Microservices" }
+        { label: "Programming & Frameworks", value: "Python, SQL, TensorFlow, PyTorch, LangChain, LlamaIndex, LangGraph Agents" },
+        { label: "Generative AI & LLMs", value: "Enterprise RAG, Multi-Agent Systems, Agentic Workflows, Prompt Engineering, NeMo Guardrails" },
+        { label: "Cloud Platforms", value: "AWS (Amazon SageMaker, Bedrock), Google Cloud (Vertex AI)" },
+        { label: "ML & NLP Libraries", value: "Hugging Face, Scikit-Learn, Spacy, NLTK, OpenCV, NumPy, Pandas, Vector DBs (Qdrant, Chroma)" },
+        { label: "MLOps & Engineering", value: "Docker, Git, CI/CD, FastAPI, Testing, Continuous Integration" }
       ],
       experience: [
         {
           id: 'exp1',
-          title: "Enterprise AI Governance & Zero-Trust Framework",
-          company: "Open Source / Independent",
-          role: "Lead Architect & Author",
-          duration: "2024 – Present",
+          title: "AI Engineer",
+          company: "Genpact, Hyderabad, India",
+          role: "Full-Time",
+          duration: "August 2023 – Present",
           bullets: [
-            "Architected deterministic policy engine using OPA/Rego to eliminate LLM prompt-injection security vulnerabilities.",
-            "Integrated Keycloak for role-based human access control and SPIRE daemonsets for cryptographic workload attestation.",
-            "Authored technical whitepapers and reproducible Docker Compose architectures."
+            "Finance Data Reconciliation System: Designed and implemented a Generative AI-powered finance-domain Statement of Account Reconciliation system to extract invoice data from PDFs and reconcile it with ERP data, identifying payment statuses and discrepancies, achieving a 70% reduction in manual processing time.",
+            "AI-Powered Data Synthesizer: Developed a tool to generate synthetic data, addressing data scarcity and privacy concerns for ML use cases, reducing data collection costs by 40%. Led a team of four, delivering the solution within deadlines.",
+            "Data Dashboard Query Assistant: Created a chatbot that streamlines access to sales and shipment data from Power BI dashboards, reducing manual data retrieval efforts by 50%.",
+            "Customer Feedback Insights Generator: Implemented a solution that clusters and analyzes product feedback using generative AI, improving decision-making through detailed feedback themes.",
+            "Enterprise Document Intelligence Platform: Developed an LLM-powered chat platform leveraging Gen AI for querying text and image documents, reducing manual R&D work by 40% and increasing query processing speed by 30%."
+          ]
+        },
+        {
+          id: 'exp2',
+          title: "Data Scientist Intern",
+          company: "Genpact, Hyderabad, India",
+          role: "Internship",
+          duration: "March 2023 – June 2023",
+          bullets: [
+            "Developed an interactive tool using machine learning and deep learning to address diverse business challenges, including fraud detection, customer retention, recommendations, and supply chain optimization across sectors like manufacturing, finance, and supply chain.",
+            "Designed a solution to identify credit defaulters and predict customer spending patterns based on transaction history. Analyzed customer segments by grouping them based on spending behavior and provided tailored business recommendations to enhance customer engagement and drive growth."
           ]
         }
       ],
       projects: [
         {
           id: 'rp1',
+          title: "PolicyPilot — Deterministic Zero-Trust AI Policy Gate",
+          role: "Lead Architect & Developer",
+          duration: "2024 – 2025",
+          bullets: [
+            "Architected deterministic zero-trust policy engine using Open Policy Agent (OPA/Rego) and Keycloak to prevent prompt injection and unauthorized tool calls.",
+            "Implemented short-lived cryptographic workload attestation with SPIFFE/SPIRE to prevent privilege escalation."
+          ]
+        },
+        {
+          id: 'rp2',
           title: "RAG Studio — Enterprise Knowledge Retrieval Platform",
           role: "AI Systems Engineer",
           duration: "2024",
           bullets: [
-            "Built high-throughput RAG engine supporting hybrid keyword/dense retrieval and cross-encoder re-ranking.",
-            "Implemented citation verification pipelines to reduce LLM hallucinations below 1.5%."
+            "Built high-throughput enterprise RAG engine supporting hybrid keyword/dense retrieval (Qdrant + BM25) and Cohere cross-encoder re-ranking.",
+            "Implemented citation verification and automated hallucination scoring with Ragas to reduce hallucinations below 1.5%."
+          ]
+        },
+        {
+          id: 'rp3',
+          title: "NovaEnterprise AI — Multi-Tenant Agent Supervisor Platform",
+          role: "Lead AI Engineer",
+          duration: "2024",
+          bullets: [
+            "Engineered multi-tenant autonomous agent platform utilizing LangGraph stateful supervisor graphs with checkpointing and human-in-the-loop validation.",
+            "Implemented workspace sandboxing with Docker, departmental token budgeting, and rate-limiting."
+          ]
+        },
+        {
+          id: 'rp4',
+          title: "LangChain Agent Evaluation System",
+          role: "AI Engineer",
+          duration: "2024",
+          bullets: [
+            "Engineered comprehensive benchmarking suite for LLM agents measuring tool selection accuracy, step latency, and contextual relevance.",
+            "Automated synthetic test dataset generation and LLM-as-a-judge scoring pipelines for production model deployments."
           ]
         }
+      ],
+      certifications: [
+        "Databricks Certified Generative AI Engineer Associate – Databricks",
+        "Building Generative AI Applications Using Amazon Bedrock – Amazon Web Services",
+        "Implementing Generative AI with Vertex AI – Google Cloud Platform",
+        "Build and Deploy a Generative AI Solution Using RAG Framework – Google Cloud Platform"
       ],
       education: [
         {
           id: 'edu1',
-          degree: "Bachelor of Technology in Computer Science & Engineering",
-          institution: "University Institute of Technology, India",
-          major: "Major in Artificial Intelligence & Data Science",
-          year: "2020 – 2024"
+          degree: "Bachelor of Science in Computer Science",
+          institution: "SRM University, Andhra Pradesh",
+          major: "Computer Science",
+          year: "August 2019 – June 2023"
         }
       ]
     }
@@ -3001,6 +3056,18 @@ destructive_action_in_freeze {
           if (parsed.skillCategories && (parsed.skillCategories.length === 4 && parsed.skillCategories.some(c => c.id === 'governance'))) {
             parsed.skillCategories = JSON.parse(JSON.stringify(DEFAULT_DATA.skillCategories));
             parsed.skills = JSON.parse(JSON.stringify(DEFAULT_DATA.skills));
+          }
+
+          // If resume experience has legacy placeholder data or missing Genpact experience, upgrade resume to real credentials:
+          if (!parsed.resume || !parsed.resume.experience || parsed.resume.experience.some(e => e.company === "Open Source / Independent" || e.title.includes("Enterprise AI Governance"))) {
+            parsed.resume = JSON.parse(JSON.stringify(DEFAULT_DATA.resume));
+            parsed.texts.resumeContact = DEFAULT_DATA.texts.resumeContact;
+            parsed.texts.resumeSummary = DEFAULT_DATA.texts.resumeSummary;
+            parsed.texts.resumeRole = DEFAULT_DATA.texts.resumeRole;
+            parsed.texts.emailUrl = DEFAULT_DATA.texts.emailUrl;
+          }
+          if (parsed.resume && !parsed.resume.certifications) {
+            parsed.resume.certifications = DEFAULT_DATA.resume.certifications;
           }
           return parsed;
         }
@@ -3559,6 +3626,18 @@ destructive_action_in_freeze {
           <ul class="resume-bullets">
             ${(p.bullets || []).map(b => `<li>${b}</li>`).join('')}
           </ul>
+        </div>
+      `).join('');
+    }
+
+    // Certifications List
+    const certBox = document.getElementById('display-resumeCertificationsList');
+    if (certBox && res.certifications) {
+      certBox.innerHTML = res.certifications.map(c => `
+        <div class="resume-item" style="margin-bottom:0.5rem;">
+          <div style="font-size:0.92rem; color:var(--text-light); line-height:1.5;">
+            <span style="color:var(--gold-bright); margin-right:0.4rem;">🏅</span><strong>${c.split('–')[0] || c}</strong> ${c.includes('–') ? '– <span style="color:var(--text-dim);">' + c.split('–')[1] + '</span>' : ''}
+          </div>
         </div>
       `).join('');
     }
