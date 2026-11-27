@@ -1,53 +1,21 @@
 import type { Metadata } from "next";
-import { Inter, Cinzel, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { ToastProvider } from "@/components/Toast";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
-const cinzel = Cinzel({
-  subsets: ["latin"],
-  variable: "--font-serif",
-  display: "swap",
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
-  title: "Lokesh Repaka — Generative AI Engineer & Forward Deployed Architect",
+  title: "Lokesh Repaka — AI Engineer & Governance Architect",
   description:
-    "Portfolio of Lokesh Repaka: Generative AI Engineer, Multi-Agent LangGraph Architect, Enterprise RAG & Deterministic AI Governance Specialist.",
+    "Production AI Engineer and Governance Architect. Specializing in LangGraph multi-agent supervisors, enterprise RAG, Keycloak IAM, and SPIFFE/SPIRE zero-trust workload identity.",
   keywords: [
     "AI Engineer",
-    "Forward Deployed Engineer",
-    "LangGraph",
-    "Multi-Agent Systems",
-    "Enterprise RAG",
     "Lokesh Repaka",
     "AI Governance",
-    "Python",
-    "FastAPI",
+    "LangGraph",
+    "Multi-Agent Systems",
+    "Keycloak",
+    "SPIFFE",
+    "SPIRE",
+    "RAG",
   ],
-  authors: [{ name: "Lokesh Repaka", url: "https://github.com/lokesh-repaka" }],
-  openGraph: {
-    title: "Lokesh Repaka — AI Engineer & Governance Architect",
-    description:
-      "Engineering Mission-Critical AI Systems, Multi-Agent Workflows, and Enterprise RAG Architectures.",
-    url: "https://lokesh-repaka.github.io",
-    siteName: "Lokesh Repaka Portfolio",
-    locale: "en_US",
-    type: "website",
-  },
 };
 
 export default function RootLayout({
@@ -56,14 +24,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${cinzel.variable} ${jetbrainsMono.variable}`}>
-      <body className="font-sans antialiased bg-bg text-text-white selection:bg-gold/30 selection:text-gold-bright flex flex-col min-h-screen">
-        <ToastProvider>
-          <Navbar />
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </ToastProvider>
-      </body>
+    <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }
