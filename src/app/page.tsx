@@ -113,7 +113,7 @@ export default function Page() {
 
       // 3. Load saved texts if present in localStorage
       try {
-        const saved = localStorage.getItem("lokesh_portfolio_data_v3");
+        const saved = localStorage.getItem("lokesh_portfolio_data_v4");
         if (saved) {
           const parsed = JSON.parse(saved);
           if (parsed.texts) setTexts((prev) => ({ ...prev, ...parsed.texts }));
@@ -180,7 +180,7 @@ export default function Page() {
           onUpdateTexts={(newTexts) => {
             setTexts(newTexts);
             if (typeof window !== "undefined") {
-              localStorage.setItem("lokesh_portfolio_data_v3", JSON.stringify({ texts: newTexts }));
+              localStorage.setItem("lokesh_portfolio_data_v4", JSON.stringify({ texts: newTexts }));
             }
           }}
           onShowToast={showToast}
