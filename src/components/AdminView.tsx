@@ -348,11 +348,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
 
     const isMatch =
       (userHash === ADMIN_USER_HASH && passHash === ADMIN_PASS_HASH) ||
-      user === "lokesh" ||
-      user === "admin" ||
-      pass === "L0k3sh@Admin#2025" ||
-      pass === "lokesh@2025" ||
-      pass === "admin123";
+      (user === "lokesh" && pass === "L0k3sh@Admin#2025");
 
     if (isMatch) {
       setIsLoggedIn(true);
@@ -361,7 +357,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
       }
       onShowToast("🎉 Logged in to Admin Portal!");
     } else {
-      alert("Invalid credentials. Try username: lokesh");
+      alert("Invalid credentials.");
     }
   };
 
@@ -965,7 +961,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
               type="text"
               id="adminUser"
               required
-              placeholder="Username (e.g. lokesh)"
+              placeholder="Enter username"
               autoComplete="off"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
