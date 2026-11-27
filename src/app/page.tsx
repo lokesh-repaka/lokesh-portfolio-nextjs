@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Header } from "@/components/Header";
 import { HomeView } from "@/components/HomeView";
 import { AboutView } from "@/components/AboutView";
@@ -15,17 +15,37 @@ import { ProjectModal } from "@/components/ProjectModal";
 import { Toast } from "@/components/Toast";
 
 import { portfolioTexts } from "@/data/portfolio";
-import { skillCategories, skills } from "@/data/skills";
-import { projectCategories, projects } from "@/data/projects";
-import { blogCategories, initialBlogs } from "@/data/blogs";
-import { resumeData } from "@/data/resume";
-import { Project, Blog } from "@/types";
+import { skillCategories as defaultSkillCats, skills as defaultSkills } from "@/data/skills";
+import { projectCategories as defaultProjCats, projects as defaultProjects } from "@/data/projects";
+import { blogCategories as defaultBlogCats, initialBlogs } from "@/data/blogs";
+import { resumeData as defaultResume } from "@/data/resume";
+import {
+  PortfolioTexts,
+  Skill,
+  SkillCategory,
+  Project,
+  ProjectCategory,
+  Blog,
+  BlogCategory,
+  ResumeData,
+} from "@/types";
 import { fetchGitHubBlogs } from "@/lib/github-blogs";
+
+const STORAGE_KEY = "lokesh_portfolio_data_v4";
 
 export default function Page() {
   const [activeView, setActiveView] = useState<string>("home");
-  const [texts, setTexts] = useState(portfolioTexts);
+
+  // Persistent States
+  const [texts, setTexts] = useState<PortfolioTexts>(portfolioTexts);
+  const [skillCategoriesList, setSkillCategoriesList] = useState<SkillCategory[]>(defaultSkillCats);
+  const [skillsList, setSkillsList] = useState<Skill[]>(defaultSkills);
+  const [projectCategoriesList, setProjectCategoriesList] = useState<ProjectCategory[]>(defaultProjCats);
+  const [projectsList, setProjectsList] = useState<Project[]>(defaultProjects);
+  const [blogCategoriesList, setBlogCategoriesList] = useState<BlogCategory[]>(defaultBlogCats);
   const [blogsList, setBlogsList] = useState<Blog[]>(initialBlogs);
+  const [resumeDataState, setResumeDataState] = useState<ResumeData>(defaultResume);
+
   const [currentArticleId, setCurrentArticleId] = useState<string>("b1");
   const [modalProject, setModalProject] = useState<Project | null>(null);
 
@@ -36,15 +56,100 @@ export default function Page() {
     icon: "✅",
   });
 
-  const showToast = (message: string, icon = "✅") => {
+  const showToast = useCallback((message: string, icon = "✅") => {
     setToast({ show: true, message, icon });
     setTimeout(() => {
       setToast((prev) => ({ ...prev, show: false }));
     }, 3200);
-  };
+  }, []);
 
-  // Navigate function matching index.html
-  const navigateTo = (viewName: string, param?: string) => {
+  // Save helper to persist current state snapshot to localStorage
+  const persistState = useCallback(
+    (overrides?: {
+      texts?: PortfolioTexts;
+      skillCategories?: SkillCategory[];
+      skills?: Skill[];
+      projectCategories?: ProjectCategory[];
+      projects?: Project[];
+      blogCategories?: BlogCategory[];
+      blogs?: Blog[];
+      resume?: ResumeData;
+    }) => {
+      if (typeof window === "undefined") return;
+      try {
+        const fullData = {
+          texts: overrides?.texts ?? texts,
+          skillCategories: overrides?.skillCategories ?? skillCategoriesList,
+          skills: overrides?.skills ?? skillsList,
+          projectCategories: overrides?.projectCategories ?? projectCategoriesList,
+          projects: overrides?.projects ?? projectsList,
+          blogCategories: overrides?.blogCategories ?? blogCategoriesList,
+          blogs: overrides?.blogs ?? blogsList,
+          resume: overrides?.resume ?? resumeDataState,
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(fullData));
+      } catch (e) {
+        console.warn("Could not save to localStorage:", e);
+      }
+    },
+    [
+      texts,
+      skillCategoriesList,
+      skillsList,
+      projectCategoriesList,
+      projectsList,
+      blogCategoriesList,
+      blogsList,
+      resumeDataState,
+    ]
+  );
+
+  // Update Handlers
+  const handleUpdateTexts = useCallback(
+    (newTexts: PortfolioTexts) => {
+      setTexts(newTexts);
+      persistState({ texts: newTexts });
+    },
+    [persistState]
+  );
+
+  const handleUpdateSkills = useCallback(
+    (newCats: SkillCategory[], newSkills: Skill[]) => {
+      setSkillCategoriesList(newCats);
+      setSkillsList(newSkills);
+      persistState({ skillCategories: newCats, skills: newSkills });
+    },
+    [persistState]
+  );
+
+  const handleUpdateProjects = useCallback(
+    (newCats: ProjectCategory[], newProjects: Project[]) => {
+      setProjectCategoriesList(newCats);
+      setProjectsList(newProjects);
+      persistState({ projectCategories: newCats, projects: newProjects });
+    },
+    [persistState]
+  );
+
+  const handleUpdateBlogs = useCallback(
+    (newCats: BlogCategory[], newBlogs: Blog[]) => {
+      setBlogCategoriesList(newCats);
+      setBlogsList(newBlogs);
+      persistState({ blogCategories: newCats, blogs: newBlogs });
+    },
+    [persistState]
+  );
+
+  const handleUpdateResume = useCallback(
+    (newResume: ResumeData) => {
+      setResumeDataState(newResume);
+      persistState({ resume: newResume });
+    },
+    [persistState]
+  );
+
+  // Navigate function matching SPA router
+  const navigateTo = useCallback((viewName: string, param?: string) => {
     setActiveView(viewName);
     if (typeof window !== "undefined") {
       window.scrollTo(0, 0);
@@ -56,7 +161,7 @@ export default function Page() {
         window.history.pushState(null, "", `#${viewName}`);
       }
     }
-  };
+  }, []);
 
   const handleOpenProjectModal = (proj: Project) => {
     setModalProject(proj);
@@ -77,17 +182,42 @@ export default function Page() {
     navigateTo("article-reader", blogId);
   };
 
-  // Initial load: parse URL hash & fetch live blogs
+  // Initial load: parse URL hash, load localStorage & fetch live blogs
   useEffect(() => {
-    // 1. Fetch live GitHub blogs
-    fetchGitHubBlogs().then((fetched) => {
-      if (fetched && fetched.length > 0) {
-        setBlogsList(fetched);
-      }
-    });
-
-    // 2. Parse URL hash
     if (typeof window !== "undefined") {
+      // 1. Load saved state from localStorage if present
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.texts) setTexts((prev) => ({ ...prev, ...parsed.texts }));
+          if (parsed.skillCategories && Array.isArray(parsed.skillCategories)) {
+            setSkillCategoriesList(parsed.skillCategories);
+          }
+          if (parsed.skills && Array.isArray(parsed.skills)) {
+            setSkillsList(parsed.skills);
+          }
+          if (parsed.projectCategories && Array.isArray(parsed.projectCategories)) {
+            setProjectCategoriesList(parsed.projectCategories);
+          }
+          if (parsed.projects && Array.isArray(parsed.projects)) {
+            setProjectsList(parsed.projects);
+          }
+          if (parsed.blogCategories && Array.isArray(parsed.blogCategories)) {
+            setBlogCategoriesList(parsed.blogCategories);
+          }
+          if (parsed.blogs && Array.isArray(parsed.blogs)) {
+            setBlogsList(parsed.blogs);
+          }
+          if (parsed.resume) {
+            setResumeDataState((prev) => ({ ...prev, ...parsed.resume }));
+          }
+        }
+      } catch (e) {
+        console.warn("Could not read local portfolio state:", e);
+      }
+
+      // 2. Parse URL hash
       const hash = window.location.hash.replace(/^#/, "");
       if (hash) {
         if (hash.startsWith("article-reader") || hash.startsWith("article")) {
@@ -99,7 +229,7 @@ export default function Page() {
           setActiveView("projects");
           const idMatch = hash.match(/id=([^&]+)/);
           if (idMatch) {
-            const found = projects.find((p) => p.id === idMatch[1]);
+            const found = projectsList.find((p) => p.id === idMatch[1]) || defaultProjects.find((p) => p.id === idMatch[1]);
             if (found) setModalProject(found);
           }
         } else if (
@@ -111,17 +241,7 @@ export default function Page() {
         }
       }
 
-      // 3. Load saved texts if present in localStorage
-      try {
-        const saved = localStorage.getItem("lokesh_portfolio_data_v4");
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          if (parsed.texts) setTexts((prev) => ({ ...prev, ...parsed.texts }));
-        }
-      } catch (e) {
-        console.warn("Could not read local portfolio state:", e);
-      }
-      // 4. Secret shortcuts to admin portal: Ctrl+Shift+L or typing "lokesh"
+      // 3. Secret shortcuts to admin portal: Ctrl+Shift+L or typing "lokesh"
       let secretBuffer = "";
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.ctrlKey && e.shiftKey && e.key.toUpperCase() === "L") {
@@ -136,6 +256,19 @@ export default function Page() {
         }
       };
       window.addEventListener("keydown", handleKeyDown);
+
+      // 4. Fetch live GitHub blogs in background (merging or updating if not already custom edited)
+      fetchGitHubBlogs().then((fetched) => {
+        if (fetched && fetched.length > 0) {
+          setBlogsList((prev) => {
+            // Keep any user-created blogs (with id starting with 'blog_')
+            const userBlogs = prev.filter((b) => b.id.startsWith("blog_"));
+            const combined = [...userBlogs, ...fetched];
+            return combined;
+          });
+        }
+      });
+
       return () => window.removeEventListener("keydown", handleKeyDown);
     }
   }, []);
@@ -161,16 +294,20 @@ export default function Page() {
       <main className="main-container">
         <HomeView texts={texts} isActive={activeView === "home"} onNavigate={navigateTo} />
         <AboutView texts={texts} isActive={activeView === "about"} onNavigate={navigateTo} />
-        <SkillsView categories={skillCategories} skills={skills} isActive={activeView === "skills"} />
-        <ResumeView texts={texts} resume={resumeData} isActive={activeView === "resume"} />
+        <SkillsView
+          categories={skillCategoriesList}
+          skills={skillsList}
+          isActive={activeView === "skills"}
+        />
+        <ResumeView texts={texts} resume={resumeDataState} isActive={activeView === "resume"} />
         <ProjectsView
-          categories={projectCategories}
-          projects={projects}
+          categories={projectCategoriesList}
+          projects={projectsList}
           isActive={activeView === "projects"}
           onOpenModal={handleOpenProjectModal}
         />
         <BlogsView
-          categories={blogCategories}
+          categories={blogCategoriesList}
           blogs={blogsList}
           isActive={activeView === "blogs"}
           onSelectBlog={handleSelectBlog}
@@ -184,21 +321,20 @@ export default function Page() {
         />
         <AdminView
           texts={texts}
-          skills={skills}
-          skillCategories={skillCategories}
-          projects={projects}
-          projectCategories={projectCategories}
+          skills={skillsList}
+          skillCategories={skillCategoriesList}
+          projects={projectsList}
+          projectCategories={projectCategoriesList}
           blogs={blogsList}
-          blogCategories={blogCategories}
-          resume={resumeData}
+          blogCategories={blogCategoriesList}
+          resume={resumeDataState}
           isActive={activeView === "admin"}
           onNavigate={navigateTo}
-          onUpdateTexts={(newTexts) => {
-            setTexts(newTexts);
-            if (typeof window !== "undefined") {
-              localStorage.setItem("lokesh_portfolio_data_v4", JSON.stringify({ texts: newTexts }));
-            }
-          }}
+          onUpdateTexts={handleUpdateTexts}
+          onUpdateSkills={handleUpdateSkills}
+          onUpdateProjects={handleUpdateProjects}
+          onUpdateBlogs={handleUpdateBlogs}
+          onUpdateResume={handleUpdateResume}
           onShowToast={showToast}
         />
       </main>
