@@ -204,10 +204,16 @@ export default function Page() {
             setProjectsList(parsed.projects);
           }
           if (parsed.blogCategories && Array.isArray(parsed.blogCategories)) {
-            setBlogCategoriesList(parsed.blogCategories);
+            const validCats = parsed.blogCategories.filter((c: BlogCategory) => c.id === "governance");
+            setBlogCategoriesList(validCats.length > 0 ? validCats : defaultBlogCats);
           }
           if (parsed.blogs && Array.isArray(parsed.blogs)) {
-            setBlogsList(parsed.blogs);
+            const valid = parsed.blogs.filter((b: Blog) =>
+              b.id === "b1" ||
+              b.githubSlug === "01-ai-and-identity-governance" ||
+              b.title.toLowerCase().includes("missing guardrail")
+            );
+            setBlogsList(valid.length > 0 ? valid : initialBlogs);
           }
           if (parsed.resume) {
             setResumeDataState((prev) => ({ ...prev, ...parsed.resume }));
@@ -257,15 +263,10 @@ export default function Page() {
       };
       window.addEventListener("keydown", handleKeyDown);
 
-      // 4. Fetch live GitHub blogs in background (merging or updating if not already custom edited)
+      // 4. Ensure blog list starts cleanly with the requested Missing Guardrail article
       fetchGitHubBlogs().then((fetched) => {
         if (fetched && fetched.length > 0) {
-          setBlogsList((prev) => {
-            // Keep any user-created blogs (with id starting with 'blog_')
-            const userBlogs = prev.filter((b) => b.id.startsWith("blog_"));
-            const combined = [...userBlogs, ...fetched];
-            return combined;
-          });
+          setBlogsList(fetched);
         }
       });
 

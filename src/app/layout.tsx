@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Lokesh Repaka — AI Engineer & Governance Architect",
+  title: "Lokesh Repaka | AI Engineer",
   description:
     "Production AI Engineer and Governance Architect. Specializing in LangGraph multi-agent supervisors, enterprise RAG, Keycloak IAM, and SPIFFE/SPIRE zero-trust workload identity.",
   keywords: [
@@ -16,6 +16,14 @@ export const metadata: Metadata = {
     "SPIRE",
     "RAG",
   ],
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico" },
+    ],
+    apple: "/favicon.svg",
+    shortcut: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
@@ -26,6 +34,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="alternate icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/favicon.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
