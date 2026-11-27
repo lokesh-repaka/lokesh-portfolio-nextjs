@@ -26,7 +26,13 @@ export const HomeView: React.FC<HomeViewProps> = ({
           <div className="hero-greeting" id="display-heroGreeting">
             {texts.heroGreeting}
           </div>
-          <h1 className="hero-name" id="display-heroName">
+          <h1
+            className="hero-name"
+            id="display-heroName"
+            onClick={() => onNavigate("admin")}
+            style={{ cursor: "pointer" }}
+            title="Admin Portal"
+          >
             {texts.heroName}
           </h1>
           <div className="hero-role" id="display-heroRole">

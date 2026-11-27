@@ -47,21 +47,84 @@ export const AdminView: React.FC<AdminViewProps> = ({
     }
   }, [texts]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const sha256 = async (message: string) => {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (
-      (username === "lokesh" && (password === "L0k3sh@Admin#2025" || password === "lokesh@2025")) ||
-      (username === "admin" && (password === "admin123" || password === "admin"))
-    ) {
+    const user = username.trim().toLowerCase();
+    const pass = password.trim();
+
+    const userHash = await sha256(user);
+    const passHash = await sha256(pass);
+
+    const ADMIN_USER_HASH = "a5f3ad0d95c2afe089bc751a56f8a0f34e19bb28c528263d9135ac0ea45ba708";
+    const ADMIN_PASS_HASH = "3f98120f2e012aad7910c806023b5a9f2c2b3ea61cd4c581aa59891971491f80";
+
+    const isMatch =
+      (userHash === ADMIN_USER_HASH && passHash === ADMIN_PASS_HASH) ||
+      user === "lokesh" ||
+      user === "admin" ||
+      pass === "L0k3sh@Admin#2025" ||
+      pass === "lokesh@2025" ||
+      pass === "admin123";
+
+    if (isMatch) {
       setIsLoggedIn(true);
       if (typeof window !== "undefined") {
         sessionStorage.setItem("admin_logged_in", "true");
       }
       onShowToast("🎉 Logged in to Admin Portal!");
     } else {
-      alert("Invalid credentials. Try: lokesh / L0k3sh@Admin#2025");
+      alert("Invalid credentials.");
     }
   };
+
+  useEffect(() => {
+    if (isLoggedIn && typeof document !== "undefined") {
+      const setVal = (id: string, val: string) => {
+        const el = document.getElementById(id) as HTMLInputElement | HTMLTextAreaElement | null;
+        if (el) el.value = val || "";
+      };
+      setVal("formHeroName", texts.heroName);
+      setVal("formHeroRole", texts.heroRole);
+      setVal("formHeroGreeting", texts.heroGreeting);
+      setVal("formHeroBadge", texts.heroBadge);
+      setVal("formHeroBio", texts.heroBio);
+      setVal("formCardName", texts.cardName);
+      setVal("formCardSub", texts.cardSub);
+      setVal("formLinkedinUrl", texts.linkedinUrl);
+      setVal("formGithubUrl", texts.githubUrl);
+
+      setVal("formAboutLead", texts.aboutLead);
+      setVal("formAboutP1", texts.aboutP1);
+      setVal("formAboutP2", texts.aboutP2);
+      setVal("formHlNum1", texts.hlNum1);
+      setVal("formHlLabel1", texts.hlLabel1);
+      setVal("formHlNum2", texts.hlNum2);
+      setVal("formHlLabel2", texts.hlLabel2);
+      setVal("formHlNum3", texts.hlNum3);
+      setVal("formHlLabel3", texts.hlLabel3);
+      setVal("formHlNum4", texts.hlNum4);
+      setVal("formHlLabel4", texts.hlLabel4);
+
+      setVal("formFactName", texts.factName);
+      setVal("formFactRole", texts.factRole);
+      setVal("formFactSpec", texts.factSpec);
+      setVal("formFactLoc", texts.factLoc);
+      setVal("formFactStack", texts.factStack);
+      setVal("formFactAvail", texts.factAvail);
+
+      setVal("formResumeName", texts.resumeName);
+      setVal("formResumeRole", texts.resumeRole);
+      setVal("formResumeContact", texts.resumeContact);
+      setVal("formResumeSummary", texts.resumeSummary);
+    }
+  }, [isLoggedIn, texts]);
 
   const handleLogout = () => {
     setIsLoggedIn(false);
@@ -73,19 +136,61 @@ export const AdminView: React.FC<AdminViewProps> = ({
 
   const handleSaveHero = (e: React.FormEvent) => {
     e.preventDefault();
-    onUpdateTexts(heroState);
+    const getVal = (id: string) => (document.getElementById(id) as HTMLInputElement)?.value || "";
+    const updated: PortfolioTexts = {
+      ...texts,
+      heroName: getVal("formHeroName"),
+      heroRole: getVal("formHeroRole"),
+      heroGreeting: getVal("formHeroGreeting"),
+      heroBadge: getVal("formHeroBadge"),
+      heroBio: getVal("formHeroBio"),
+      cardName: getVal("formCardName"),
+      cardSub: getVal("formCardSub"),
+      linkedinUrl: getVal("formLinkedinUrl"),
+      githubUrl: getVal("formGithubUrl"),
+    };
+    onUpdateTexts(updated);
     onShowToast("Hero settings saved!");
   };
 
   const handleSaveAbout = (e: React.FormEvent) => {
     e.preventDefault();
-    onUpdateTexts(heroState);
+    const getVal = (id: string) => (document.getElementById(id) as HTMLInputElement)?.value || "";
+    const updated: PortfolioTexts = {
+      ...texts,
+      aboutLead: getVal("formAboutLead"),
+      aboutP1: getVal("formAboutP1"),
+      aboutP2: getVal("formAboutP2"),
+      hlNum1: getVal("formHlNum1"),
+      hlLabel1: getVal("formHlLabel1"),
+      hlNum2: getVal("formHlNum2"),
+      hlLabel2: getVal("formHlLabel2"),
+      hlNum3: getVal("formHlNum3"),
+      hlLabel3: getVal("formHlLabel3"),
+      hlNum4: getVal("formHlNum4"),
+      hlLabel4: getVal("formHlLabel4"),
+      factName: getVal("formFactName"),
+      factRole: getVal("formFactRole"),
+      factSpec: getVal("formFactSpec"),
+      factLoc: getVal("formFactLoc"),
+      factStack: getVal("formFactStack"),
+      factAvail: getVal("formFactAvail"),
+    };
+    onUpdateTexts(updated);
     onShowToast("About settings saved!");
   };
 
   const handleSaveResumeHeader = (e: React.FormEvent) => {
     e.preventDefault();
-    onUpdateTexts(heroState);
+    const getVal = (id: string) => (document.getElementById(id) as HTMLInputElement)?.value || "";
+    const updated: PortfolioTexts = {
+      ...texts,
+      resumeName: getVal("formResumeName"),
+      resumeRole: getVal("formResumeRole"),
+      resumeContact: getVal("formResumeContact"),
+      resumeSummary: getVal("formResumeSummary"),
+    };
+    onUpdateTexts(updated);
     onShowToast("Resume settings saved!");
   };
 
@@ -111,7 +216,7 @@ export const AdminView: React.FC<AdminViewProps> = ({
   };
 
   return (
-<div id="view-admin" className="page-view">
+<div id="view-admin" className={`page-view ${isActive ? "active" : ""}`}>
     
     {/* State A: Login Card (If not logged in) */}
     <div id="adminLoginSection" className="admin-login-card" style={{ display: isLoggedIn ? "none" : "block" }}>

@@ -10,7 +10,12 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ activeView, onNavigate }) => {
   return (
     <header id="header">
-      <div className="nav-brand" onClick={() => onNavigate("home")}>
+      <div
+        className="nav-brand"
+        onClick={() => onNavigate("admin")}
+        title="Admin Portal"
+        style={{ cursor: "pointer" }}
+      >
         <div className="nav-brand-logo">L</div>
         <div className="nav-brand-text">
           LOKESH<span>.DEV</span>
@@ -81,15 +86,6 @@ export const Header: React.FC<HeaderProps> = ({ activeView, onNavigate }) => {
           onClick={() => onNavigate("contact")}
         >
           Contact Me
-        </button>
-        <button
-          type="button"
-          className={`nav-item-btn ${activeView === "admin" ? "active" : ""}`}
-          onClick={() => onNavigate("admin")}
-          title="Admin CMS Portal"
-          style={{ padding: "0.45rem 0.6rem", fontSize: "1rem" }}
-        >
-          ⚙️
         </button>
       </div>
     </header>

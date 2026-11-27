@@ -121,6 +121,22 @@ export default function Page() {
       } catch (e) {
         console.warn("Could not read local portfolio state:", e);
       }
+      // 4. Secret shortcuts to admin portal: Ctrl+Shift+L or typing "lokesh"
+      let secretBuffer = "";
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.ctrlKey && e.shiftKey && e.key.toUpperCase() === "L") {
+          e.preventDefault();
+          navigateTo("admin");
+        }
+        secretBuffer += e.key.toLowerCase();
+        if (secretBuffer.length > 10) secretBuffer = secretBuffer.slice(-10);
+        if (secretBuffer.endsWith("lokesh")) {
+          secretBuffer = "";
+          navigateTo("admin");
+        }
+      };
+      window.addEventListener("keydown", handleKeyDown);
+      return () => window.removeEventListener("keydown", handleKeyDown);
     }
   }, []);
 
