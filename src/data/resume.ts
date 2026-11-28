@@ -52,6 +52,17 @@ export const resumeData: ResumeData = {
   ],
   "projects": [
     {
+      "id": "rp_nova",
+      "title": "NovaEnterprise — Enterprise Knowledge & Decision Intelligence Platform",
+      "role": "Lead AI Systems & Agentic Orchestration Architect",
+      "duration": "2024 – 2025",
+      "bullets": [
+        "Architected an enterprise decision intelligence platform orchestrating a 13-node LangGraph multi-agent supervisor with dynamic query routing across Vector RAG (Qdrant + BM25 RRF), Knowledge Graph (Neo4j/NetworkX), and Relational SQL (PostgreSQL/SQLite).",
+        "Engineered bounded Corrective Retrieval Augmented Generation (CRAG) with automatic query reformulation and coverage gap evaluation, achieving <10s canonical multi-hop resolution latency.",
+        "Enforced zero-trust guardrails including SQLGlot AST validation (blocking DDL/DML, comments, and unauthorized joins), XML prompt injection quarantine envelopes, and deterministic verification nodes guaranteeing 100% citation attestation."
+      ]
+    },
+    {
       "id": "rp1",
       "title": "Enterprise AP Invoice Automation Platform (ApexAP)",
       "role": "Lead AI & Backend Architect",

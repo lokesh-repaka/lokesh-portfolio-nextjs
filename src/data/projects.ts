@@ -17,6 +17,26 @@ export const projectCategories: ProjectCategory[] = [
 
 export const projects: Project[] = [
   {
+    "id": "nova_enterprise",
+    "title": "NovaEnterprise — Enterprise Knowledge & Decision Intelligence Platform",
+    "category": "rag",
+    "desc": "Enterprise-grade Decision & Knowledge Intelligence Platform engineered to answer complex cross-domain questions across relational records, knowledge graphs, and unstructured engineering postmortems. Built on the core principle that retrieval strategy is a routing decision rather than a library choice, the platform orchestrates a stateful 13-node LangGraph supervisor engine with dynamic multi-store query routing across Qdrant Hybrid Vector RAG (BM25 + Dense RRF), Neo4j/NetworkX typed knowledge graph traversals, and AST-governed PostgreSQL Text-to-SQL. Features bounded corrective retrieval (CRAG), strict prompt-injection quarantine envelopes, and two-phase deterministic verification nodes guaranteeing 100% citation attestation.",
+    "tags": [
+      "LangGraph (13 Nodes)",
+      "GraphRAG",
+      "Hybrid Vector (RRF)",
+      "FastAPI",
+      "Next.js 15",
+      "Qdrant",
+      "Neo4j",
+      "PostgreSQL",
+      "Docker"
+    ],
+    "url": "https://github.com/lokesh-repaka/NovaEnterprise",
+    "liveUrl": "https://nova-enterprise-lokesh.vercel.app",
+    "theme": "cyan"
+  },
+  {
     "id": "enterprise_ap",
     "title": "Enterprise AP Invoice Automation Platform (ApexAP)",
     "category": "automation",
