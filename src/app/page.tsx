@@ -32,7 +32,7 @@ import {
 } from "@/types";
 import { fetchGitHubBlogs } from "@/lib/github-blogs";
 
-const STORAGE_KEY = "lokesh_portfolio_data_v6";
+const STORAGE_KEY = "lokesh_portfolio_data_v7";
 
 export default function Page() {
   const [activeView, setActiveView] = useState<string>("home");
@@ -187,7 +187,7 @@ export default function Page() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       // 1. Invalidate stale cache keys from previous versions
-      ["lokesh_portfolio_data_v1", "lokesh_portfolio_data_v2", "lokesh_portfolio_data_v3", "lokesh_portfolio_data_v4", "lokesh_portfolio_data_v5"].forEach((k) => {
+      ["lokesh_portfolio_data_v1", "lokesh_portfolio_data_v2", "lokesh_portfolio_data_v3", "lokesh_portfolio_data_v4", "lokesh_portfolio_data_v5", "lokesh_portfolio_data_v6"].forEach((k) => {
         try { localStorage.removeItem(k); } catch (_) {}
       });
 

@@ -101,8 +101,8 @@ export interface ResumeExperience {
 export interface ResumeProject {
   id: string;
   title: string;
-  role: string;
-  duration: string;
+  role?: string;
+  duration?: string;
   bullets: string[];
 }
 

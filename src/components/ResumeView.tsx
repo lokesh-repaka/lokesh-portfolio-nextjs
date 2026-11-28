@@ -117,11 +117,7 @@ export const ResumeView: React.FC<ResumeViewProps> = ({
             {resume.projects.map((proj) => (
               <div key={proj.id} className="resume-item">
                 <div className="resume-item-top">
-                  <span>{proj.title}</span>
-                  <span>{proj.duration || ""}</span>
-                </div>
-                <div className="resume-item-sub">
-                  <span>{proj.role || "Lead Architect"}</span>
+                  <span style={{ fontWeight: 600, color: "var(--text-bright, #fff)" }}>{proj.title}</span>
                 </div>
                 <ul className="resume-bullets">
                   {proj.bullets.map((b, bIdx) => (

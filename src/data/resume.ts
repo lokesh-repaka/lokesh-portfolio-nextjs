@@ -54,8 +54,6 @@ export const resumeData: ResumeData = {
     {
       "id": "rp_nova",
       "title": "NovaEnterprise — Enterprise Knowledge & Decision Intelligence Platform",
-      "role": "Lead AI Systems & Agentic Orchestration Architect",
-      "duration": "2024 – 2025",
       "bullets": [
         "Architected an enterprise decision intelligence platform orchestrating a 13-node LangGraph multi-agent supervisor with dynamic query routing across Vector RAG (Qdrant + BM25 RRF), Knowledge Graph (Neo4j/NetworkX), and Relational SQL (PostgreSQL/SQLite).",
         "Engineered bounded Corrective Retrieval Augmented Generation (CRAG) with automatic query reformulation and coverage gap evaluation, achieving <10s canonical multi-hop resolution latency.",
@@ -65,8 +63,6 @@ export const resumeData: ResumeData = {
     {
       "id": "rp1",
       "title": "Enterprise AP Invoice Automation Platform (ApexAP)",
-      "role": "Lead AI & Backend Architect",
-      "duration": "2024 \u2013 2025",
       "bullets": [
         "Architected an autonomous, audit-grade Accounts Payable invoice processing platform for multinational finance operations, achieving an enterprise pilot 90.00% Straight-Through Processing (STP) rate (surpassing the \u226565% target).",
         "Implemented automated 3-way PO matching (Invoice vs PO vs Goods Receipt) with deterministic tolerance checks, eliminating manual reconciliation overhead and invoice discrepancies.",
@@ -76,8 +72,6 @@ export const resumeData: ResumeData = {
     {
       "id": "rp2",
       "title": "CloudDesk \u2014 Autonomous Support Resolution Platform",
-      "role": "Lead Agentic AI Engineer",
-      "duration": "2024",
       "bullets": [
         "Engineered an enterprise-grade AI customer support resolution platform orchestrating specialized agent teams to diagnose cloud infrastructure issues and reduce resolution times by 65%.",
         "Designed deterministic policy guardrails and Human-in-the-Loop (HITL) approval gates for sensitive operational actions, preventing unauthorized refunds and billing mutations.",
@@ -87,8 +81,6 @@ export const resumeData: ResumeData = {
     {
       "id": "rp3",
       "title": "ApexMotion \u2014 Supplier Risk Intelligence Platform",
-      "role": "Lead AI & Distributed Systems Engineer",
-      "duration": "2024",
       "bullets": [
         "Architected a real-time supply chain disruption intelligence platform for a Tier-1 EV manufacturer managing 4,500 global suppliers across 38 countries over 400,000 network relationships.",
         "Engineered an early-warning disruption engine calculating deterministic inventory Days of Cover (DoC) and multi-million dollar financial exposures weeks ahead of potential factory shortages.",
@@ -98,8 +90,6 @@ export const resumeData: ResumeData = {
     {
       "id": "rp4",
       "title": "RAG Studio & DocuMind AI \u2014 17-Stage Visual RAG Architecture & Multi-Agent Platform",
-      "role": "Lead AI Systems Architect & Evaluation Engineer",
-      "duration": "2024",
       "bullets": [
         "Purpose-built an enterprise visual RAG pipeline engineering platform featuring an interactive 17-stage design engine ('RAGForge') that guides architects from raw corpora to production across ingestion, semantic chunking, hybrid retrieval (Dense + BM25 RRF), cross-encoder reranking, NeMo guardrails, and HITL governance, with 1-click export to Terraform, Kubernetes, Docker, and Python.",
         "Eliminated manual RAG guesswork by engineering an autonomous 6-specialist LangGraph optimization swarm ('AutoRAG Architect') that empirically benchmarks pipeline permutations against RAGAS metrics (faithfulness, context precision, answer relevancy), reducing hallucination rates below 1.2%.",
@@ -109,8 +99,6 @@ export const resumeData: ResumeData = {
     {
       "id": "rp5",
       "title": "AnomalyEngine \u2014 Enterprise Multi-Tier Financial Fraud & Risk Platform",
-      "role": "Lead Machine Learning & Backend Architect",
-      "duration": "2024",
       "bullets": [
         "Architected an enterprise multi-tier transaction fraud and anomaly detection platform delivering sub-15ms P99 screening latency across high-throughput financial ledgers.",
         "Implemented a 5-tier hybrid defense pipeline combining deterministic AST business rules, vendor contract clause validations, statistical rolling Z-score baselines, and unsupervised Isolation Forest ML.",
