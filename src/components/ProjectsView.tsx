@@ -38,7 +38,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
     blue: "linear-gradient(135deg, #091e3a 0%, #172554 100%)",
     purple: "linear-gradient(135deg, #180d2b 0%, #3b0764 100%)",
     green: "linear-gradient(135deg, #062b1a 0%, #064e3b 100%)",
-    cyan: "linear-gradient(135deg, #0e172a 0%, #1e293b 100%)",
+    cyan: "linear-gradient(135deg, #081d2e 0%, #0e3b5e 100%)",
   };
 
   const icons: Record<string, string> = {
@@ -46,7 +46,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
     blue: "🔍",
     purple: "🧠",
     green: "⚡",
-    cyan: "🛡️",
+    cyan: "🌐",
   };
 
   return (

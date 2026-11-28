@@ -28,10 +28,11 @@ import {
   Blog,
   BlogCategory,
   ResumeData,
+  ResumeProject,
 } from "@/types";
 import { fetchGitHubBlogs } from "@/lib/github-blogs";
 
-const STORAGE_KEY = "lokesh_portfolio_data_v4";
+const STORAGE_KEY = "lokesh_portfolio_data_v6";
 
 export default function Page() {
   const [activeView, setActiveView] = useState<string>("home");
@@ -185,7 +186,12 @@ export default function Page() {
   // Initial load: parse URL hash, load localStorage & fetch live blogs
   useEffect(() => {
     if (typeof window !== "undefined") {
-      // 1. Load saved state from localStorage if present
+      // 1. Invalidate stale cache keys from previous versions
+      ["lokesh_portfolio_data_v1", "lokesh_portfolio_data_v2", "lokesh_portfolio_data_v3", "lokesh_portfolio_data_v4", "lokesh_portfolio_data_v5"].forEach((k) => {
+        try { localStorage.removeItem(k); } catch (_) {}
+      });
+
+      // 2. Load saved state from localStorage if present
       try {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) {
@@ -198,10 +204,16 @@ export default function Page() {
             setSkillsList(parsed.skills);
           }
           if (parsed.projectCategories && Array.isArray(parsed.projectCategories)) {
-            setProjectCategoriesList(parsed.projectCategories);
+            const parsedCatIds = new Set(parsed.projectCategories.map((c: ProjectCategory) => c.id));
+            const missingCats = defaultProjCats.filter((dc) => !parsedCatIds.has(dc.id));
+            setProjectCategoriesList([...parsed.projectCategories, ...missingCats]);
           }
           if (parsed.projects && Array.isArray(parsed.projects)) {
-            setProjectsList(parsed.projects);
+            const parsedIds = new Set(parsed.projects.map((p: Project) => p.id));
+            const missingProjects = defaultProjects.filter((dp) => !parsedIds.has(dp.id));
+            setProjectsList([...missingProjects, ...parsed.projects]);
+          } else {
+            setProjectsList(defaultProjects);
           }
           if (parsed.blogCategories && Array.isArray(parsed.blogCategories)) {
             const validCats = parsed.blogCategories.filter((c: BlogCategory) => c.id === "governance");
@@ -216,8 +228,23 @@ export default function Page() {
             setBlogsList(valid.length > 0 ? valid : initialBlogs);
           }
           if (parsed.resume) {
-            setResumeDataState((prev) => ({ ...prev, ...parsed.resume }));
+            const parsedProjIds = new Set(
+              (parsed.resume.projects || []).map((p: ResumeProject) => p.id)
+            );
+            const missingResumeProjs = (defaultResume.projects || []).filter(
+              (dp) => !parsedProjIds.has(dp.id)
+            );
+            setResumeDataState((prev) => ({
+              ...defaultResume,
+              ...parsed.resume,
+              projects: [...missingResumeProjs, ...(parsed.resume.projects || [])],
+            }));
+          } else {
+            setResumeDataState(defaultResume);
           }
+        } else {
+          setProjectsList(defaultProjects);
+          setResumeDataState(defaultResume);
         }
       } catch (e) {
         console.warn("Could not read local portfolio state:", e);
